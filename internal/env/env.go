@@ -10,6 +10,7 @@ import (
 	"io"
 	"io/ioutil"
 
+	"github.com/jrmsdev/sadm/internal/cfg"
 	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/jail"
 	"github.com/jrmsdev/sadm/internal/log"
@@ -21,13 +22,16 @@ type Env struct {
 	name string
 	args *args.Args
 	ctl  Manager
+	//~ cfg  *cfg.Cfg
 }
 
-func New(name string, src io.ReadCloser) (*Env, error) {
+func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Env, error) {
 	log.Debug("new %s", name)
 	environ := new(Env)
 	environ.name = name
+	//~ environ.cfg = config
 	defer src.Close()
+	// parse args
 	if blob, err := ioutil.ReadAll(src); err != nil {
 		return nil, err
 	} else {
@@ -35,9 +39,9 @@ func New(name string, src io.ReadCloser) (*Env, error) {
 		if err := json.Unmarshal(blob, &a); err != nil {
 			return nil, err
 		}
-		environ.args = args.New(a)
+		environ.args = args.New(config, a)
 	}
-	log.Debug("%#v", environ)
+	//~ log.Debug("%#v", environ)
 	return newManager(environ)
 }
 

@@ -5,7 +5,6 @@ package cfg
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"path/filepath"
@@ -15,12 +14,13 @@ import (
 
 type Cfg struct {
 	EnvDir string
+	LibDir string
 }
 
 func New(src io.ReadCloser) (*Cfg, error) {
 	log.Debug("new")
 	config := new(Cfg)
-	config.EnvDir = filepath.FromSlash("/usr/local/etc/sadm.d")
+	setDefaults(config)
 	defer src.Close()
 	if blob, err := ioutil.ReadAll(src); err != nil {
 		return nil, err
@@ -29,11 +29,14 @@ func New(src io.ReadCloser) (*Cfg, error) {
 			return nil, err
 		}
 	}
+	// paths cleanup
 	config.EnvDir = filepath.Clean(config.EnvDir)
-	log.Debug("%s", config)
+	config.LibDir = filepath.Clean(config.LibDir)
+	//~ log.Debug("%#v", config)
 	return config, nil
 }
 
-func (c *Cfg) String() string {
-	return fmt.Sprintf("%#v", c)
+func setDefaults(config *Cfg) {
+	config.EnvDir = filepath.FromSlash("/opt/sadm/etc/sadm.d")
+	config.LibDir = filepath.FromSlash("/opt/sadm/lib/sadm")
 }

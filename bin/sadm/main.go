@@ -20,7 +20,7 @@ var (
 
 func init() {
 	var (
-		defCfg = filepath.FromSlash("/usr/local/etc/sadm.json")
+		defCfg = filepath.FromSlash("/opt/sadm/etc/sadm.json")
 		defLog = "error"
 	)
 	flag.StringVar(&cfgfile, "config", defCfg, "`file` path")
@@ -65,7 +65,7 @@ func main() {
 				log.Error(err)
 				os.Exit(5)
 			} else {
-				if environ, err := env.New(envname, envfh); err != nil {
+				if environ, err := env.New(config, envname, envfh); err != nil {
 					log.Error(err)
 					os.Exit(3)
 				} else {

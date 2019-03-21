@@ -1,5 +1,5 @@
 {
   "type": "jail",
-  "daemon": "apache",
+  "service": "sshd",
   "initd": "true"
 }

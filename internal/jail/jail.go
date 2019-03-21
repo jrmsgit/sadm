@@ -12,7 +12,7 @@ type Jail struct {
 }
 
 func New(opt *args.Args) (*Jail, error) {
-	log.Debug("new %#v", opt)
+	log.Debug("new")
 	return &Jail{}, nil
 }
 

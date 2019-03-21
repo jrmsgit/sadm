@@ -4,6 +4,10 @@
 package args
 
 import (
+	"encoding/json"
+	"io"
+	"io/ioutil"
+	"os"
 	"path/filepath"
 	"runtime"
 
@@ -17,6 +21,7 @@ type Args struct {
 }
 
 func New(config *cfg.Cfg, src map[string]string) *Args {
+	log.Debug("new")
 	a := &Args{config, src}
 	a.setRuntime()
 	a.setOS()
@@ -34,6 +39,23 @@ func (a *Args) setOS() {
 	a.db["pkgman"] = "dpkg"
 }
 
+func (a *Args) load(prefix string, fh io.ReadCloser) {
+	defer fh.Close()
+	src := make(map[string]string)
+	if blob, err := ioutil.ReadAll(fh); err != nil {
+		log.Error(err)
+	} else {
+		if err := json.Unmarshal(blob, &src); err != nil {
+			log.Error(err)
+		} else {
+			for opt, val := range src {
+				a.db[prefix+"."+opt] = val
+			}
+			log.Debug("%s loaded %#v", prefix, a.db)
+		}
+	}
+}
+
 func (a *Args) loadService() {
 	s := a.db["service"]
 	if s != "" {
@@ -43,6 +65,11 @@ func (a *Args) loadService() {
 		}
 		for _, fn := range files {
 			log.Debug("service load %s", fn)
+			if fh, err := os.Open(fn); err != nil {
+				log.Error(err)
+			} else {
+				a.load(s, fh)
+			}
 		}
 	}
 }

@@ -1,0 +1,30 @@
+sudo: false
+language: go
+os: linux
+
+go:
+  - tip
+  - "1.11.x"
+  - "1.10.x"
+  - "1.9.x"
+
+git:
+  depth: 5
+  submodules: false
+
+branches:
+  only:
+    - master
+
+matrix:
+  include:
+    - os: osx
+      go: "1.x"
+    - os: windows
+      go: "1.x"
+
+install:
+  - ./install.py
+
+script:
+  - ./test.sh

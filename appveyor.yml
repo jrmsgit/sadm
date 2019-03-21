@@ -1,0 +1,31 @@
+# https://www.appveyor.com/docs/appveyor-yml/
+
+version: build{build}
+
+branches:
+  only:
+    - master
+
+max_jobs: 3
+
+image: Ubuntu1804
+
+clone_folder: /usr/go/src/github.com/jrmsdev/sadm
+clone_depth: 5
+
+stack: go 1.11
+
+matrix:
+  fast_finish: true
+
+before_build:
+  - export GOPATH=/usr/go
+  - go version
+
+build_script:
+  - ./install.py
+
+test_script:
+  - ./test.sh
+
+deploy: off

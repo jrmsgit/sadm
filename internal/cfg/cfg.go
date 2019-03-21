@@ -37,6 +37,6 @@ func New(src io.ReadCloser) (*Cfg, error) {
 }
 
 func setDefaults(config *Cfg) {
-	config.EnvDir = filepath.FromSlash("/opt/sadm/etc/sadm.d")
-	config.LibDir = filepath.FromSlash("/opt/sadm/lib/sadm")
+	config.EnvDir = filepath.FromSlash("/usr/local/etc/sadm.d")
+	config.LibDir = filepath.FromSlash("/usr/local/lib/sadm")
 }

@@ -12,18 +12,20 @@ import (
 )
 
 type Env struct {
-	Name string `json:"-"`
+	name string
+	args map[string]string
 }
 
 func New(name string, src io.ReadCloser) (*Env, error) {
 	log.Debug("new %s", name)
 	environ := new(Env)
-	environ.Name = name
+	environ.name = name
 	defer src.Close()
 	if blob, err := ioutil.ReadAll(src); err != nil {
 		return nil, err
 	} else {
-		if err := json.Unmarshal(blob, &environ); err != nil {
+		environ.args = make(map[string]string)
+		if err := json.Unmarshal(blob, &environ.args); err != nil {
 			return nil, err
 		}
 	}
@@ -32,10 +34,9 @@ func New(name string, src io.ReadCloser) (*Env, error) {
 }
 
 func (e *Env) String() string {
-	return e.Name
+	return e.name
 }
 
-func (e *Env) Run(action string) error {
-	log.Debug("run %s %s", action, e)
-	return nil
+func (e *Env) Type() string {
+	return e.args["type"]
 }

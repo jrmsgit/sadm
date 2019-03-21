@@ -1,1 +1,5 @@
-{}
+{
+  "type": "jail",
+  "daemon": "apache",
+  "initd": "true"
+}

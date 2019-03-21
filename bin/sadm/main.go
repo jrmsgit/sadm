@@ -69,7 +69,7 @@ func main() {
 					log.Error(err)
 					os.Exit(3)
 				} else {
-					if err := environ.Run(action); err != nil {
+					if err := env.Run(environ, action); err != nil {
 						log.Error(err)
 						os.Exit(4)
 					}

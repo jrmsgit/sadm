@@ -43,15 +43,15 @@ func (a *Args) load(prefix string, fh io.ReadCloser) {
 	defer fh.Close()
 	src := make(map[string]string)
 	if blob, err := ioutil.ReadAll(fh); err != nil {
-		log.Error(err)
+		log.Warn(err)
 	} else {
 		if err := json.Unmarshal(blob, &src); err != nil {
-			log.Error(err)
+			log.Warn(err)
 		} else {
 			for opt, val := range src {
 				a.db[prefix+"."+opt] = val
 			}
-			log.Debug("%s loaded %#v", prefix, a.db)
+			//~ log.Debug("%s loaded %#v", prefix, a.db)
 		}
 	}
 }
@@ -66,7 +66,7 @@ func (a *Args) loadService() {
 		for _, fn := range files {
 			log.Debug("service load %s", fn)
 			if fh, err := os.Open(fn); err != nil {
-				log.Error(err)
+				log.Warn(err)
 			} else {
 				a.load(s, fh)
 			}

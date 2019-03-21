@@ -13,6 +13,8 @@ type logger struct {
 	Debug  func(string, ...interface{})
 	Errorf func(string, ...interface{})
 	Error  func(error)
+	Warnf  func(string, ...interface{})
+	Warn   func(error)
 	Printf func(string, ...interface{})
 	Print  func(...interface{})
 }
@@ -26,12 +28,18 @@ func Init(level string) error {
 	l.Debug = quietf
 	l.Errorf = errorf
 	l.Error = perror
+	l.Warnf = quietf
+	l.Warn = quieterr
 	l.Printf = printf
 	l.Print = print
 	if level == "debug" {
 		l.Debug = debug
+		l.Warnf = warnf
+		l.Warn = warn
+	} else if level == "warn" {
+		l.Warnf = warnf
+		l.Warn = warn
 	} else if level == "quiet" {
-		l.Debug = quietf
 		l.Printf = quietf
 		l.Print = quiet
 	}
@@ -44,12 +52,23 @@ func quietf(format string, args ...interface{}) {
 func quiet(args ...interface{}) {
 }
 
+func quieterr(err error) {
+}
+
 func errorf(format string, args ...interface{}) {
 	fmt.Fprintf(os.Stderr, "E: "+format+"\n", args...)
 }
 
 func perror(err error) {
 	errorf("%s", err)
+}
+
+func warnf(format string, args ...interface{}) {
+	fmt.Fprintf(os.Stderr, "W: "+format+"\n", args...)
+}
+
+func warn(err error) {
+	warnf("%s", err)
 }
 
 func printf(format string, args ...interface{}) {
@@ -80,6 +99,14 @@ func Errorf(format string, args ...interface{}) {
 
 func Error(err error) {
 	l.Error(err)
+}
+
+func Warnf(format string, args ...interface{}) {
+	l.Warnf(format, args...)
+}
+
+func Warn(err error) {
+	l.Warn(err)
 }
 
 func Printf(format string, args ...interface{}) {

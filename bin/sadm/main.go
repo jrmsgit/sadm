@@ -29,7 +29,7 @@ func init() {
 
 func usage() {
 	log.Print("usage: sadm env action")
-	log.Print("       (run sadm -help for more information)")
+	log.Print("*run `sadm -help` for more information")
 }
 
 func main() {
@@ -42,15 +42,12 @@ func main() {
 	if envname == "" {
 		log.Errorf("no env name")
 		argsok = false
-	}
-	if action == "" {
+	} else if action == "" {
 		log.Errorf("no action")
 		argsok = false
-	}
-	if action != "dump" && action != "check" {
+	} else if action != "dump" && action != "check" {
 		log.Errorf("invalid action %s", action)
-		usage()
-		os.Exit(8)
+		argsok = false
 	}
 	if !argsok {
 		usage()

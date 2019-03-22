@@ -63,6 +63,10 @@ func newManager(e *Env) (*Env, error) {
 	return e, nil
 }
 
+func (e *Env) Dump() (string, error) {
+	return e.args.Dump()
+}
+
 func (e *Env) String() string {
 	return e.name
 }

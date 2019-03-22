@@ -11,8 +11,15 @@ import (
 
 func Run(e *Env, action string) error {
 	log.Debug("%s %s %s", e.name, action, e.Type())
-	if action == "check" {
+	if action == "dump" {
+		if s, err := e.Dump(); err != nil {
+			return err
+		} else {
+			log.Print(s)
+			return nil
+		}
+	} else if action == "check" {
 		return e.ctl.Check()
 	}
-	return errors.New("invalid action: "+action)
+	return errors.New("invalid action: " + action)
 }

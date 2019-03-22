@@ -1,5 +1,0 @@
-{
-  "type": "jail",
-  "service": "sshd",
-  "initd": "true"
-}

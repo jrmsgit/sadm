@@ -64,10 +64,10 @@ func (a *Args) loadService() {
 			filepath.Join(a.cfg.LibDir, "service", s, "config-"+a.db["os"]+".json"),
 		}
 		for _, fn := range files {
-			log.Debug("service load %s", fn)
 			if fh, err := os.Open(fn); err != nil {
 				log.Warn(err)
 			} else {
+				log.Debug("service load %s", fn)
 				a.load(s, fh)
 			}
 		}

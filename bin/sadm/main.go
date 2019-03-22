@@ -47,6 +47,11 @@ func main() {
 		log.Errorf("no action")
 		argsok = false
 	}
+	if action != "dump" && action != "check" {
+		log.Errorf("invalid action %s", action)
+		usage()
+		os.Exit(8)
+	}
 	if !argsok {
 		usage()
 		os.Exit(9)

@@ -1,0 +1,4 @@
+{
+  "type": "jail",
+  "service": "sshd"
+}

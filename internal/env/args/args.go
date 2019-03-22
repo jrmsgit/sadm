@@ -60,8 +60,8 @@ func (a *Args) loadService() {
 	s := a.db["service"]
 	if s != "" {
 		files := []string{
-			filepath.Join(a.cfg.LibDir, "service", s, "config.json"),
-			filepath.Join(a.cfg.LibDir, "service", s, "config-"+a.db["os"]+".json"),
+			filepath.Join(a.cfg.CfgDir, "service", s, "config.json"),
+			filepath.Join(a.cfg.CfgDir, "service", s, "config-"+a.db["os"]+".json"),
 		}
 		for _, fn := range files {
 			if fh, err := os.Open(fn); err != nil {

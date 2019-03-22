@@ -1,4 +1,4 @@
 {
   "EnvDir": "./etc/devel/sadm.d",
-  "LibDir": "./lib"
+  "CfgDir": "./etc/sadm"
 }

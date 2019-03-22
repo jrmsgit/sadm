@@ -34,7 +34,7 @@ if __name__ == '__main__':
 	os.system('mkdir -vp %s/etc/sadm.d' % prefix)
 	os.system('cp -va etc/sadm.json %s/etc' % prefix)
 
-	os.system('mkdir -vp %s/lib/sadm' % prefix)
-	os.system('cp -va lib/* %s/lib/sadm' % prefix)
+	os.system('mkdir -vp %s/etc/sadm' % prefix)
+	os.system('cp -va etc/sadm/* %s/etc/sadm' % prefix)
 
 	sys.exit(0)

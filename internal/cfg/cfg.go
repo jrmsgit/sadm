@@ -12,13 +12,15 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
+var prefix = "/usr/local"
+
 type Cfg struct {
 	EnvDir string
 	LibDir string
 }
 
 func New(src io.ReadCloser) (*Cfg, error) {
-	log.Debug("new")
+	log.Debug("new prefix=%s", prefix)
 	config := new(Cfg)
 	setDefaults(config)
 	defer src.Close()
@@ -37,6 +39,7 @@ func New(src io.ReadCloser) (*Cfg, error) {
 }
 
 func setDefaults(config *Cfg) {
-	config.EnvDir = filepath.FromSlash("/usr/local/etc/sadm.d")
-	config.LibDir = filepath.FromSlash("/usr/local/lib/sadm")
+	p := filepath.FromSlash(prefix)
+	config.EnvDir = filepath.Join(p, "etc", "sadm.d")
+	config.LibDir = filepath.Join(p, "lib", "sadm")
 }

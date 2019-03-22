@@ -22,7 +22,7 @@ matrix:
       go: "1.x"
 
 install:
-  - ./install.py
+  - ./install.py --prefix ${GOPATH}
 
 script:
   - ./test.sh

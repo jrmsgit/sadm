@@ -7,6 +7,7 @@ import (
 	"errors"
 
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/internal/service"
 )
 
 func Run(e *Env, action string) error {
@@ -19,7 +20,10 @@ func Run(e *Env, action string) error {
 			return nil
 		}
 	} else if action == "check" {
-		return e.ctl.Check()
+		if err := e.ctl.Check(); err != nil {
+			return err
+		}
+		return service.Check(e.args)
 	}
 	return errors.New("invalid action: " + action)
 }

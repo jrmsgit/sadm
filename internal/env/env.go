@@ -41,26 +41,34 @@ func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Env, error) {
 		}
 		environ.args = args.New(config, a)
 	}
+	// env manager
+	if err := newManager(environ); err != nil {
+		return nil, err
+	}
+	// env service
+	if environ.args.Get("service") == "" {
+		return nil, errors.New(sprintf("%s: service definition is empty", name))
+	}
 	//~ log.Debug("%#v", environ)
-	return newManager(environ)
+	return environ, nil
 }
 
-func newManager(e *Env) (*Env, error) {
+func newManager(e *Env) error {
 	log.Debug("new manager %s", e.name)
 	typ := e.Type()
 	if typ == "" {
-		return nil, errors.New(sprintf("%s: type definition is empty", e.name))
+		return errors.New(sprintf("%s: type definition is empty", e.name))
 	}
 	var err error
 	if typ == "jail" {
 		e.ctl, err = jail.New(e.args)
 		if err != nil {
-			return nil, err
+			return err
 		}
 	} else {
-		return nil, errors.New(sprintf("%s: invalid type %s", e.name, typ))
+		return errors.New(sprintf("%s: invalid type %s", e.name, typ))
 	}
-	return e, nil
+	return nil
 }
 
 func (e *Env) Dump() (string, error) {

@@ -20,8 +20,6 @@ matrix:
   include:
     - os: osx
       go: "1.x"
-    - os: windows
-      go: "1.x"
 
 install:
   - ./install.py

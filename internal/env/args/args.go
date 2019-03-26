@@ -45,7 +45,7 @@ func (a *Args) load(prefix string, fh io.ReadCloser) {
 			log.Warn(err)
 		} else {
 			if prefix != "" {
-				prefix = prefix+"."
+				prefix = prefix + "."
 			}
 			for opt, val := range src {
 				a.db[prefix+opt] = val
@@ -89,7 +89,7 @@ func (a *Args) loadService() {
 	if s != "" {
 		files := []string{
 			filepath.Join(a.cfg.CfgDir, "service", s, "config.json"),
-			filepath.Join(a.cfg.CfgDir, "service", s, "config-"+a.db["os"]+".json"),
+			filepath.Join(a.cfg.CfgDir, "service", s, a.db["os"]+".json"),
 		}
 		for _, fn := range files {
 			if fh, err := os.Open(fn); err != nil {

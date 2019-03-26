@@ -57,6 +57,14 @@ func (a *Args) load(prefix string, fh io.ReadCloser) {
 
 func (a *Args) loadOS() {
 	n := a.db["os"]
+	fn := filepath.Join(a.cfg.CfgDir, "os", "config.json")
+	if fh, err := os.Open(fn); err != nil {
+		log.Error(err)
+		return
+	} else {
+		log.Debug("os load %s", fn)
+		a.load("os", fh)
+	}
 	if n != "" {
 		fn := filepath.Join(a.cfg.CfgDir, "os", n, "config.json")
 		if fh, err := os.Open(fn); err != nil {

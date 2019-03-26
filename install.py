@@ -17,12 +17,10 @@ def build_cfg(src_file):
 	print('%s done' % dst_file)
 
 args = ArgumentParser(description = 'sadm installer')
-args.add_argument('--prefix', default = prefix)
+args.add_argument('--prefix', default = prefix, metavar = prefix, help = 'install prefix')
+args.add_argument('--remove', action = 'store_true', default = False, help = 'uninstall')
 
-if __name__ == '__main__':
-	flags = args.parse_args()
-	prefix = flags.prefix
-
+def install():
 	os.environ['GOBIN'] = '%s/bin' % prefix
 
 	build_cfg('./internal/cfg/build.go.in')
@@ -37,4 +35,14 @@ if __name__ == '__main__':
 	os.system('mkdir -vp %s/etc/sadm' % prefix)
 	os.system('cp -va etc/sadm/* %s/etc/sadm' % prefix)
 
+def uninstall():
+	os.system('rm -rfv %s/bin/sadm %s/etc/sadm.d %s/etc/sadm %s/etc/sadm.json' % (prefix, prefix, prefix, prefix))
+
+if __name__ == '__main__':
+	flags = args.parse_args()
+	prefix = flags.prefix
+	if flags.remove:
+		uninstall()
+	else:
+		install()
 	sys.exit(0)

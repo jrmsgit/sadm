@@ -16,9 +16,10 @@ import (
 )
 
 type Args struct {
-	cfg *cfg.Cfg
-	db  map[string]string
-	OS string
+	cfg     *cfg.Cfg
+	db      map[string]string
+	Type    string
+	OS      string
 	Service string
 }
 
@@ -27,8 +28,11 @@ func New(config *cfg.Cfg, src map[string]string) (*Args, error) {
 	a := new(Args)
 	a.cfg = config
 	a.db = src
-	a.OS = runtime.GOOS
 	a.setRuntime()
+	a.Type = src["type"]
+	if err := a.init(); err != nil {
+		return nil, err
+	}
 	if err := a.loadOS(); err != nil {
 		return nil, err
 	}
@@ -40,7 +44,28 @@ func New(config *cfg.Cfg, src map[string]string) (*Args, error) {
 	return a, nil
 }
 
+func (a *Args) init() error {
+	log.Debug("init %s", a.Type)
+	files := []string{
+		filepath.Join(a.cfg.CfgDir, "env", "config.json"),
+		filepath.Join(a.cfg.CfgDir, "env", a.Type, "config.json"),
+	}
+	for _, fn := range files {
+		if fh, err := os.Open(fn); err != nil {
+			log.Debug("%s", err)
+			return err
+		} else {
+			log.Debug("load %s", fn)
+			if err := a.load("", fh); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
 func (a *Args) setRuntime() {
+	a.OS = runtime.GOOS
 	a.db["os"] = a.OS
 	a.db["arch"] = runtime.GOARCH
 }

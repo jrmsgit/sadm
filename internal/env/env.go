@@ -83,5 +83,5 @@ func (e *Env) String() string {
 }
 
 func (e *Env) Type() string {
-	return e.args.Get("type")
+	return e.args.Type
 }

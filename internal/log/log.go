@@ -34,8 +34,6 @@ func Init(level string) error {
 	l.Print = print
 	if level == "debug" {
 		l.Debug = debug
-		l.Errorf = debugErrorf
-		l.Error = debugError
 		l.Warnf = warnf
 		l.Warn = warn
 	} else if level == "warn" {

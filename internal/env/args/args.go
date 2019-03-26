@@ -43,9 +43,11 @@ func (a *Args) load(prefix string, fh io.ReadCloser) error {
 	defer fh.Close()
 	src := make(map[string]string)
 	if blob, err := ioutil.ReadAll(fh); err != nil {
+		log.Debug("%s", err)
 		return err
 	} else {
 		if err := json.Unmarshal(blob, &src); err != nil {
+			log.Debug("%s", err)
 			return err
 		} else {
 			if prefix != "" {
@@ -63,6 +65,7 @@ func (a *Args) load(prefix string, fh io.ReadCloser) error {
 func (a *Args) loadOS() error {
 	fn := filepath.Join(a.cfg.CfgDir, "os", "config.json")
 	if fh, err := os.Open(fn); err != nil {
+		log.Debug("%s", err)
 		return err
 	} else {
 		log.Debug("load %s", fn)
@@ -74,6 +77,7 @@ func (a *Args) loadOS() error {
 	if n != "" {
 		fn := filepath.Join(a.cfg.CfgDir, "os", n, "config.json")
 		if fh, err := os.Open(fn); err != nil {
+			log.Debug("%s", err)
 			return err
 		} else {
 			log.Debug("load %s", fn)
@@ -86,6 +90,7 @@ func (a *Args) loadOS() error {
 func (a *Args) loadService() error {
 	fn := filepath.Join(a.cfg.CfgDir, "service", "config.json")
 	if fh, err := os.Open(fn); err != nil {
+		log.Debug("%s", err)
 		return err
 	} else {
 		log.Debug("load %s", fn)
@@ -101,6 +106,7 @@ func (a *Args) loadService() error {
 		}
 		for _, fn := range files {
 			if fh, err := os.Open(fn); err != nil {
+				log.Debug("%s", err)
 				return err
 			} else {
 				log.Debug("load %s", fn)

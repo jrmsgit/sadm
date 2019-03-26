@@ -9,14 +9,10 @@ import (
 )
 
 type Jail struct {
+	opt *args.Args
 }
 
 func New(opt *args.Args) (*Jail, error) {
 	log.Debug("new")
-	return &Jail{}, nil
-}
-
-func (j *Jail) Check() error {
-	log.Debug("check")
-	return nil
+	return &Jail{opt}, nil
 }

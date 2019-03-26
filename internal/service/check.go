@@ -9,7 +9,7 @@ import (
 )
 
 func Check(opt *args.Args) error {
-	log.Debug("check %s", opt.Get("service"))
+	log.Debug("%s", opt.Get("service"))
 	//~ s, _ := opt.Dump()
 	//~ log.Print(s)
 	return nil

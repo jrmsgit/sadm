@@ -9,6 +9,6 @@ import (
 )
 
 func (j *Jail) Check() error {
-	log.Debug("%s", j.opt.Get("service"))
+	log.Debug(j.opt.Service)
 	return nil
 }

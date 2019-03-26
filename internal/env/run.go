@@ -11,7 +11,7 @@ import (
 )
 
 func Run(e *Env, action string) error {
-	log.Debug("%s %s %s", e.name, action, e.Type())
+	log.Debug("%s %s %s", action, e.Type(), e.name)
 	if action == "dump" {
 		if s, err := e.Dump(); err != nil {
 			return err

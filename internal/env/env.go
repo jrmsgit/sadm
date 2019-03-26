@@ -49,7 +49,7 @@ func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Env, error) {
 		return nil, err
 	}
 	// env service
-	if environ.args.Get("service") == "" {
+	if environ.args.Service == "" {
 		return nil, errors.New(sprintf("%s: service definition is empty", name))
 	}
 	//~ log.Debug("%#v", environ)

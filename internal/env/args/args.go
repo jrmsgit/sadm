@@ -24,7 +24,7 @@ func New(config *cfg.Cfg, src map[string]string) *Args {
 	log.Debug("new")
 	a := &Args{config, src}
 	a.setRuntime()
-	a.setOS()
+	a.loadOS()
 	a.loadService()
 	//~ log.Debug("new %#v", a)
 	return a
@@ -33,10 +33,6 @@ func New(config *cfg.Cfg, src map[string]string) *Args {
 func (a *Args) setRuntime() {
 	a.db["os"] = runtime.GOOS
 	a.db["arch"] = runtime.GOARCH
-}
-
-func (a *Args) setOS() {
-	a.db["pkgman"] = "dpkg"
 }
 
 func (a *Args) load(prefix string, fh io.ReadCloser) {
@@ -52,6 +48,19 @@ func (a *Args) load(prefix string, fh io.ReadCloser) {
 				a.db[prefix+"."+opt] = val
 			}
 			//~ log.Debug("%s loaded %#v", prefix, a.db)
+		}
+	}
+}
+
+func (a *Args) loadOS() {
+	n := a.db["os"]
+	if n != "" {
+		fn := filepath.Join(a.cfg.CfgDir, "os", n, "config.json")
+		if fh, err := os.Open(fn); err != nil {
+			log.Warn(err)
+		} else {
+			log.Debug("os load %s", fn)
+			a.load("os", fh)
 		}
 	}
 }

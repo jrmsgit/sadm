@@ -56,27 +56,35 @@ func (a *Args) load(prefix string, fh io.ReadCloser) {
 }
 
 func (a *Args) loadOS() {
-	n := a.db["os"]
 	fn := filepath.Join(a.cfg.CfgDir, "os", "config.json")
 	if fh, err := os.Open(fn); err != nil {
 		log.Error(err)
 		return
 	} else {
-		log.Debug("os load %s", fn)
+		log.Debug("load %s", fn)
 		a.load("os", fh)
 	}
+	n := a.db["os"]
 	if n != "" {
 		fn := filepath.Join(a.cfg.CfgDir, "os", n, "config.json")
 		if fh, err := os.Open(fn); err != nil {
 			log.Warn(err)
 		} else {
-			log.Debug("os load %s", fn)
+			log.Debug("load %s", fn)
 			a.load("os", fh)
 		}
 	}
 }
 
 func (a *Args) loadService() {
+	fn := filepath.Join(a.cfg.CfgDir, "service", "config.json")
+	if fh, err := os.Open(fn); err != nil {
+		log.Error(err)
+		return
+	} else {
+		log.Debug("load %s", fn)
+		a.load("service", fh)
+	}
 	s := a.db["service"]
 	if s != "" {
 		files := []string{
@@ -87,8 +95,8 @@ func (a *Args) loadService() {
 			if fh, err := os.Open(fn); err != nil {
 				log.Warn(err)
 			} else {
-				log.Debug("service load %s", fn)
-				a.load(s, fh)
+				log.Debug("load %s", fn)
+				a.load("service", fh)
 			}
 		}
 	}

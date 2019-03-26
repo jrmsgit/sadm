@@ -20,14 +20,18 @@ type Args struct {
 	db  map[string]string
 }
 
-func New(config *cfg.Cfg, src map[string]string) *Args {
+func New(config *cfg.Cfg, src map[string]string) (*Args, error) {
 	log.Debug("new")
 	a := &Args{config, src}
 	a.setRuntime()
-	a.loadOS()
-	a.loadService()
+	if err := a.loadOS(); err != nil {
+		return nil, err
+	}
+	if err := a.loadService(); err != nil {
+		return nil, err
+	}
 	//~ log.Debug("new %#v", a)
-	return a
+	return a, nil
 }
 
 func (a *Args) setRuntime() {
@@ -35,14 +39,14 @@ func (a *Args) setRuntime() {
 	a.db["arch"] = runtime.GOARCH
 }
 
-func (a *Args) load(prefix string, fh io.ReadCloser) {
+func (a *Args) load(prefix string, fh io.ReadCloser) error {
 	defer fh.Close()
 	src := make(map[string]string)
 	if blob, err := ioutil.ReadAll(fh); err != nil {
-		log.Warn(err)
+		return err
 	} else {
 		if err := json.Unmarshal(blob, &src); err != nil {
-			log.Warn(err)
+			return err
 		} else {
 			if prefix != "" {
 				prefix = prefix + "."
@@ -53,37 +57,41 @@ func (a *Args) load(prefix string, fh io.ReadCloser) {
 			//~ log.Debug("%s loaded %#v", prefix, a.db)
 		}
 	}
+	return nil
 }
 
-func (a *Args) loadOS() {
+func (a *Args) loadOS() error {
 	fn := filepath.Join(a.cfg.CfgDir, "os", "config.json")
 	if fh, err := os.Open(fn); err != nil {
-		log.Error(err)
-		return
+		return err
 	} else {
 		log.Debug("load %s", fn)
-		a.load("os", fh)
+		if err := a.load("os", fh); err != nil {
+			return err
+		}
 	}
 	n := a.db["os"]
 	if n != "" {
 		fn := filepath.Join(a.cfg.CfgDir, "os", n, "config.json")
 		if fh, err := os.Open(fn); err != nil {
-			log.Warn(err)
+			return err
 		} else {
 			log.Debug("load %s", fn)
-			a.load("os", fh)
+			return a.load("os", fh)
 		}
 	}
+	return nil
 }
 
-func (a *Args) loadService() {
+func (a *Args) loadService() error {
 	fn := filepath.Join(a.cfg.CfgDir, "service", "config.json")
 	if fh, err := os.Open(fn); err != nil {
-		log.Error(err)
-		return
+		return err
 	} else {
 		log.Debug("load %s", fn)
-		a.load("service", fh)
+		if err := a.load("service", fh); err != nil {
+			return err
+		}
 	}
 	s := a.db["service"]
 	if s != "" {
@@ -93,13 +101,16 @@ func (a *Args) loadService() {
 		}
 		for _, fn := range files {
 			if fh, err := os.Open(fn); err != nil {
-				log.Warn(err)
+				return err
 			} else {
 				log.Debug("load %s", fn)
-				a.load("service", fh)
+				if err := a.load("service", fh); err != nil {
+					return err
+				}
 			}
 		}
 	}
+	return nil
 }
 
 func (a *Args) Get(opt string) string {

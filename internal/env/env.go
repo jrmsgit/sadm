@@ -39,7 +39,10 @@ func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Env, error) {
 		if err := json.Unmarshal(blob, &a); err != nil {
 			return nil, err
 		}
-		environ.args = args.New(config, a)
+		environ.args, err = args.New(config, a)
+		if err != nil {
+			return nil, err
+		}
 	}
 	// env manager
 	if err := newManager(environ); err != nil {

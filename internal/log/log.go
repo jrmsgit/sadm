@@ -34,6 +34,8 @@ func Init(level string) error {
 	l.Print = print
 	if level == "debug" {
 		l.Debug = debug
+		l.Errorf = debugErrorf
+		l.Error = debugError
 		l.Warnf = warnf
 		l.Warn = warn
 	} else if level == "warn" {
@@ -61,6 +63,19 @@ func errorf(format string, args ...interface{}) {
 
 func perror(err error) {
 	errorf("%s", err)
+}
+
+func debugErrorf(format string, args ...interface{}) {
+	tag := "E: "
+	_, fn, ln, ok := runtime.Caller(3)
+	if ok {
+		tag = fmt.Sprintf("%s:%d E: ", fn, ln)
+	}
+	fmt.Fprintf(os.Stderr, tag+format+"\n", args...)
+}
+
+func debugError(err error) {
+	debugErrorf("%s", err)
 }
 
 func warnf(format string, args ...interface{}) {

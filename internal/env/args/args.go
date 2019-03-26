@@ -101,7 +101,7 @@ func (a *Args) loadService() error {
 	s := a.db["service"]
 	if s != "" {
 		files := []string{
-			filepath.Join(a.cfg.CfgDir, "service", s, "config.json"),
+			//~ filepath.Join(a.cfg.CfgDir, "service", s, "config.json"),
 			filepath.Join(a.cfg.CfgDir, "service", s, a.db["os"]+".json"),
 		}
 		for _, fn := range files {

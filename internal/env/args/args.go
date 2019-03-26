@@ -44,8 +44,11 @@ func (a *Args) load(prefix string, fh io.ReadCloser) {
 		if err := json.Unmarshal(blob, &src); err != nil {
 			log.Warn(err)
 		} else {
+			if prefix != "" {
+				prefix = prefix+"."
+			}
 			for opt, val := range src {
-				a.db[prefix+"."+opt] = val
+				a.db[prefix+opt] = val
 			}
 			//~ log.Debug("%s loaded %#v", prefix, a.db)
 		}

@@ -11,7 +11,7 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-var ttl = 100 * time.Millisecond
+var ttl = 30 * time.Second
 
 func Exec(command string, args ...string) ([]byte, error) {
 	log.Debug("%s %v", command, args)

@@ -57,7 +57,7 @@ func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Env, error) {
 }
 
 func newManager(e *Env) error {
-	typ := e.Type()
+	typ := e.args.Type
 	if typ == "" {
 		return errors.New(sprintf("%s type definition is empty", e.name))
 	}
@@ -72,16 +72,4 @@ func newManager(e *Env) error {
 		return errors.New(sprintf("%s: invalid type %s", e.name, typ))
 	}
 	return nil
-}
-
-func (e *Env) Dump() (string, error) {
-	return e.args.Dump()
-}
-
-func (e *Env) String() string {
-	return e.name
-}
-
-func (e *Env) Type() string {
-	return e.args.Type
 }

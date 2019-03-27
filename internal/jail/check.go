@@ -20,8 +20,10 @@ func (j *Jail) Check() error {
 	if info, err := ldd.List(j.args, cmd); err != nil {
 		return err
 	} else {
-		for _, fn := range info.Files {
-			log.Print(fn)
+		for fn, ok := range info.Files {
+			if ok {
+				log.Print(fn)
+			}
 		}
 	}
 	return nil

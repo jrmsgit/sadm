@@ -9,13 +9,13 @@ import (
 
 type Info struct {
 	Filename string
-	Files    []string
+	Files    map[string]bool
 }
 
 func newInfo(filename string) *Info {
 	log.Debug("new info %s", filename)
 	return &Info{
 		filename,
-		make([]string, 0),
+		make(map[string]bool),
 	}
 }

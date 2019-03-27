@@ -57,11 +57,11 @@ func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Env, error) {
 }
 
 func newManager(e *Env) error {
-	log.Debug("new manager %s", e.name)
 	typ := e.Type()
 	if typ == "" {
-		return errors.New(sprintf("%s: type definition is empty", e.name))
+		return errors.New(sprintf("%s type definition is empty", e.name))
 	}
+	log.Debug("%s %s manager", e.name, typ)
 	var err error
 	if typ == "jail" {
 		e.ctl, err = jail.New(e.args)

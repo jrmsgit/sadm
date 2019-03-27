@@ -33,6 +33,7 @@ func usage() {
 }
 
 func main() {
+	// parse args and init log
 	flag.Parse()
 	log.Init(loglevel)
 	log.Debug("init")
@@ -53,24 +54,29 @@ func main() {
 		usage()
 		os.Exit(9)
 	}
+	// read config file
 	if fh, err := os.Open(cfgfile); err != nil {
 		log.Error(err)
 		os.Exit(1)
 	} else {
+		// create config
 		defer fh.Close()
 		if config, err := cfg.New(fh); err != nil {
 			log.Error(err)
 			os.Exit(2)
 		} else {
+			// load env
 			envfile := filepath.Join(config.EnvDir, envname+".json")
 			if envfh, err := os.Open(envfile); err != nil {
 				log.Error(err)
 				os.Exit(5)
 			} else {
+				// create env
 				if environ, err := env.New(config, envname, envfh); err != nil {
 					log.Error(err)
 					os.Exit(3)
 				} else {
+					// run env action
 					if err := env.Run(environ, action); err != nil {
 						log.Error(err)
 						os.Exit(4)

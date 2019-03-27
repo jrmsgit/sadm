@@ -5,11 +5,14 @@ package jail
 
 import (
 	"errors"
+	"fmt"
 	"path/filepath"
 
 	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
 )
+
+var sprintf = fmt.Sprintf
 
 type Jail struct {
 	opt *args.Args

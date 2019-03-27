@@ -29,7 +29,7 @@ func New(config *cfg.Cfg, env string, src map[string]string) (*Args, error) {
 	log.Debug("new %s", env)
 	a := new(Args)
 	a.cfg = config
-	a.db = src
+	a.db = make(map[string]string)
 	a.Env = env
 	a.setRuntime()
 	a.Type = src["type"]
@@ -43,8 +43,15 @@ func New(config *cfg.Cfg, env string, src map[string]string) (*Args, error) {
 	if err := a.loadService(); err != nil {
 		return nil, err
 	}
+	a.source(src)
 	//~ log.Debug("new %#v", a)
 	return a, nil
+}
+
+func (a *Args) source(src map[string]string) {
+	for k, v := range src {
+		a.db[k] = v
+	}
 }
 
 func (a *Args) init() error {
@@ -136,7 +143,7 @@ func (a *Args) loadService() error {
 	if s != "" {
 		files := []string{
 			//~ filepath.Join(a.cfg.CfgDir, "service", s, "config.json"),
-			filepath.Join(a.cfg.CfgDir, "service", s, a.db["os"]+".json"),
+			filepath.Join(a.cfg.CfgDir, "service", s, a.OS+".json"),
 		}
 		for _, fn := range files {
 			if fh, err := os.Open(fn); err != nil {

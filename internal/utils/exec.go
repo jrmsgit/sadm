@@ -5,7 +5,9 @@ package utils
 
 import (
 	"context"
+	"errors"
 	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/jrmsdev/sadm/internal/log"
@@ -21,7 +23,7 @@ func Exec(command string, args ...string) ([]byte, error) {
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Debug("%s", err)
-		return nil, err
+		return nil, errors.New(strings.TrimSpace(string(out)))
 	}
 	return out, nil
 }

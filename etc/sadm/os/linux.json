@@ -1,4 +1,4 @@
 {
   "pkg": "dpkg",
-  "pkg.which": "pkg which %s"
+  "pkg.exec": "/usr/bin/dpkg"
 }

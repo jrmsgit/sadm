@@ -1,1 +1,4 @@
-{}
+{
+  "pkg": "pkgng",
+  "pkg.which": "pkg which %s"
+}

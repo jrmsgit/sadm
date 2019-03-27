@@ -1,4 +1,4 @@
 {
-  "ldd": "/usr/bin/ldd",
-  "ldd.exclude": ""
+  "pkg": "",
+  "pkg.which": ""
 }

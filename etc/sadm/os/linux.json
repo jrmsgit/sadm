@@ -1,3 +1,4 @@
 {
-  "ldd.exclude": "linux-vdso.so*"
+  "pkg": "dpkg",
+  "pkg.which": "pkg which %s"
 }

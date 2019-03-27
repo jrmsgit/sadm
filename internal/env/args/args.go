@@ -5,6 +5,7 @@ package args
 
 import (
 	"encoding/json"
+	"errors"
 	"io"
 	"io/ioutil"
 	"os"
@@ -18,16 +19,18 @@ import (
 type Args struct {
 	cfg     *cfg.Cfg
 	db      map[string]string
+	Env     string
 	Type    string
 	OS      string
 	Service string
 }
 
-func New(config *cfg.Cfg, src map[string]string) (*Args, error) {
-	log.Debug("new")
+func New(config *cfg.Cfg, env string, src map[string]string) (*Args, error) {
+	log.Debug("new %s", env)
 	a := new(Args)
 	a.cfg = config
 	a.db = src
+	a.Env = env
 	a.setRuntime()
 	a.Type = src["type"]
 	if err := a.init(); err != nil {
@@ -152,4 +155,13 @@ func (a *Args) loadService() error {
 
 func (a *Args) Get(opt string) string {
 	return a.db[opt]
+}
+
+func (a *Args) Update(opt, val string) error {
+	_, ok := a.db[opt]
+	if !ok {
+		return errors.New("invalid option "+opt)
+	}
+	a.db[opt] = val
+	return nil
 }

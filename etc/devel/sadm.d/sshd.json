@@ -1,4 +1,5 @@
 {
   "type": "jail",
-  "service": "sshd"
+  "service": "sshd",
+  "destdir": "/lalala/lelele/sadm/sshd"
 }

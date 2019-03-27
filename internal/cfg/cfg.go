@@ -20,9 +20,10 @@ type Cfg struct {
 }
 
 func New(src io.ReadCloser) (*Cfg, error) {
-	log.Debug("new prefix=%s", prefix)
+	log.Debug("new")
 	config := new(Cfg)
 	setDefaults(config)
+	log.Debug("prefix=%s", prefix)
 	defer src.Close()
 	if blob, err := ioutil.ReadAll(src); err != nil {
 		return nil, err

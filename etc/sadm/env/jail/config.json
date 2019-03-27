@@ -1,3 +1,4 @@
 {
-  "type": "jail"
+  "type": "jail",
+  "destdir": "/opt/sadm"
 }

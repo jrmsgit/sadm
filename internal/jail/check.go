@@ -17,10 +17,10 @@ func (j *Jail) Check() error {
 		return errors.New(sprintf("%s exec is empty", j.args.Service))
 	}
 	log.Debug("%s cmd %s", j.args.Service, cmd)
-	if fl, err := ldd.List(j.args, cmd); err != nil {
+	if info, err := ldd.List(j.args, cmd); err != nil {
 		return err
 	} else {
-		for _, fn := range fl {
+		for _, fn := range info.Files {
 			log.Print(fn)
 		}
 	}

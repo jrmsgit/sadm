@@ -11,18 +11,18 @@ import (
 	"github.com/jrmsdev/sadm/internal/utils"
 )
 
-func List(opt *args.Args, filename string) ([]string, error) {
+func List(opt *args.Args, filename string) (*Info, error) {
 	x := opt.Get("ldd")
 	if x == "" {
 		x = "ldd"
 	}
 	log.Debug("%s %s", x, filename)
-	l := make([]string, 0)
+	l := newInfo(filename)
 	if out, err := utils.Exec(x, filename); err != nil {
 		log.Debug("%s", err)
 		return nil, err
 	} else {
-		if err := parse(l, string(out)); err != nil {
+		if err := parse(l.Files, string(out)); err != nil {
 			return nil, err
 		}
 	}

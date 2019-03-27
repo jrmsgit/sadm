@@ -25,7 +25,7 @@ func newManager(opt *args.Args) (Manager, error) {
 	}
 	log.Debug("new pkg manager %s (%s)", pkgman, pkgcmd)
 	if pkgman == "dpkg" {
-		return dpkgNew(pkgcmd), nil
+		return dpkgNew(opt), nil
 	}
 	return nil, errors.New("invalid os pkg manager "+pkgman)
 }

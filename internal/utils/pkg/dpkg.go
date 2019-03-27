@@ -6,6 +6,7 @@ package pkg
 import (
 	"strings"
 
+	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils"
 )
@@ -14,7 +15,8 @@ type dpkgManager struct {
 	cmd string
 }
 
-func dpkgNew(cmd string) *dpkgManager {
+func dpkgNew(opt *args.Args) *dpkgManager {
+	cmd := opt.Get("os.pkg.exec")
 	log.Debug("dpkg new %s", cmd)
 	return &dpkgManager{cmd}
 }

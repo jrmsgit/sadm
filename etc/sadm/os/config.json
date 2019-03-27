@@ -1,3 +1,4 @@
 {
-  "pkgman": ""
+  "ldd": "/usr/bin/ldd",
+  "ldd.exclude": ""
 }

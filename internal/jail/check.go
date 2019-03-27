@@ -12,12 +12,12 @@ import (
 )
 
 func (j *Jail) Check() error {
-	cmd := j.opt.Get("service.exec")
+	cmd := j.args.Get("service.exec")
 	if cmd == "" {
-		return errors.New(sprintf("%s exec is empty", j.opt.Service))
+		return errors.New(sprintf("%s exec is empty", j.args.Service))
 	}
-	log.Debug("%s cmd %s", j.opt.Service, cmd)
-	if fl, err := ldd.List(cmd); err != nil {
+	log.Debug("%s cmd %s", j.args.Service, cmd)
+	if fl, err := ldd.List(j.args, cmd); err != nil {
 		return err
 	} else {
 		for _, fn := range fl {

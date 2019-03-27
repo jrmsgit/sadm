@@ -15,7 +15,7 @@ import (
 var sprintf = fmt.Sprintf
 
 type Jail struct {
-	opt *args.Args
+	args *args.Args
 }
 
 func New(opt *args.Args) (*Jail, error) {
@@ -28,12 +28,12 @@ func New(opt *args.Args) (*Jail, error) {
 }
 
 func (j *Jail) setDefaults() error {
-	log.Debug("set defaults %s", j.opt.Env)
-	destdir := filepath.FromSlash(j.opt.Get("destdir"))
+	log.Debug("set defaults %s", j.args.Env)
+	destdir := filepath.FromSlash(j.args.Get("destdir"))
 	if destdir == "" {
 		return errors.New("jail destdir is not set")
 	}
-	if err := j.opt.Update("destdir", filepath.Join(destdir, j.opt.Env)); err != nil {
+	if err := j.args.Update("destdir", filepath.Join(destdir, j.args.Env)); err != nil {
 		return err
 	}
 	return nil

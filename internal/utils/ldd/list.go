@@ -4,13 +4,11 @@
 package ldd
 
 import (
-	"context"
-	"os/exec"
 	"strings"
-	"time"
 
 	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/internal/utils"
 )
 
 func List(opt *args.Args, filename string) ([]string, error) {
@@ -20,10 +18,7 @@ func List(opt *args.Args, filename string) ([]string, error) {
 	}
 	log.Debug("%s %s", x, filename)
 	l := make([]string, 0)
-	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
-	defer cancel()
-	cmd := exec.CommandContext(ctx, x, filename)
-	if out, err := cmd.CombinedOutput(); err != nil {
+	if out, err := utils.Exec(x, filename); err != nil {
 		log.Debug("%s", err)
 		return nil, err
 	} else {

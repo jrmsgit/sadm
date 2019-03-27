@@ -59,6 +59,7 @@ func (a *Args) init() error {
 	files := []string{
 		filepath.Join(a.cfg.CfgDir, "env", "config.json"),
 		filepath.Join(a.cfg.CfgDir, "env", a.Type, "config.json"),
+		filepath.Join(a.cfg.CfgDir, "env", a.Type, a.OS+".json"),
 	}
 	for _, fn := range files {
 		if fh, err := os.Open(fn); err != nil {
@@ -104,56 +105,41 @@ func (a *Args) load(prefix string, fh io.ReadCloser) error {
 }
 
 func (a *Args) loadOS() error {
-	fn := filepath.Join(a.cfg.CfgDir, "os", "config.json")
-	if fh, err := os.Open(fn); err != nil {
-		log.Debug("%s", err)
-		return err
-	} else {
-		log.Debug("load %s", fn)
-		if err := a.load("os", fh); err != nil {
-			return err
-		}
+	if a.OS == "" {
+		return errors.New("runtime OS is empty!?? =(")
 	}
-	n := a.OS
-	if n != "" {
-		fn := filepath.Join(a.cfg.CfgDir, "os", n, "config.json")
+	files := []string{
+		filepath.Join(a.cfg.CfgDir, "os", "config.json"),
+		filepath.Join(a.cfg.CfgDir, "os", a.OS+".json"),
+	}
+	for _, fn := range files {
 		if fh, err := os.Open(fn); err != nil {
 			log.Debug("%s", err)
 			return err
 		} else {
 			log.Debug("load %s", fn)
-			return a.load("os", fh)
+			if err := a.load("os", fh); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
 }
 
 func (a *Args) loadService() error {
-	fn := filepath.Join(a.cfg.CfgDir, "service", "config.json")
-	if fh, err := os.Open(fn); err != nil {
-		log.Debug("%s", err)
-		return err
-	} else {
-		log.Debug("load %s", fn)
-		if err := a.load("service", fh); err != nil {
-			return err
-		}
+	files := []string{
+		filepath.Join(a.cfg.CfgDir, "service", "config.json"),
+		filepath.Join(a.cfg.CfgDir, "service", a.Service, "config.json"),
+		filepath.Join(a.cfg.CfgDir, "service", a.Service, a.OS+".json"),
 	}
-	s := a.Service
-	if s != "" {
-		files := []string{
-			//~ filepath.Join(a.cfg.CfgDir, "service", s, "config.json"),
-			filepath.Join(a.cfg.CfgDir, "service", s, a.OS+".json"),
-		}
-		for _, fn := range files {
-			if fh, err := os.Open(fn); err != nil {
-				log.Debug("%s", err)
+	for _, fn := range files {
+		if fh, err := os.Open(fn); err != nil {
+			log.Debug("%s", err)
+			return err
+		} else {
+			log.Debug("load %s", fn)
+			if err := a.load("service", fh); err != nil {
 				return err
-			} else {
-				log.Debug("load %s", fn)
-				if err := a.load("service", fh); err != nil {
-					return err
-				}
 			}
 		}
 	}

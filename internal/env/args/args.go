@@ -167,7 +167,7 @@ func (a *Args) Get(opt string) string {
 func (a *Args) Update(opt, val string) error {
 	_, ok := a.db[opt]
 	if !ok {
-		return errors.New("invalid option "+opt)
+		return errors.New("invalid option " + opt)
 	}
 	a.db[opt] = val
 	return nil

@@ -1,4 +1,5 @@
 {
   "pkg": "dpkg",
-  "pkg.exec": "/usr/bin/dpkg"
+  "pkg.exec": "/usr/bin/dpkg",
+  "pkg.exclude": "debconf adduser dpkg libpam-modules libpam-runtime lsb-base passwd"
 }

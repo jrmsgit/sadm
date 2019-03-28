@@ -10,6 +10,8 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
+var depDone = errors.New("depdone")
+
 type Info struct {
 	Pkg  string
 	Deps []*Info

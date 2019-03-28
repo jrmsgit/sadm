@@ -16,7 +16,7 @@ import (
 var ttl = 30 * time.Second
 
 func Exec(command string, args ...string) ([]byte, error) {
-	log.Debug("%s %v", command, args)
+	//~ log.Debug("%s %v", command, args)
 	ctx, cancel := context.WithTimeout(context.Background(), ttl)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, command, args...)

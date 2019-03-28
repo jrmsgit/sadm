@@ -10,9 +10,18 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
+type Info struct {
+	Pkg      string
+	Deps     []*Info
+}
+
+func (i *Info) String() string {
+	return i.Pkg
+}
+
 type Manager interface {
-	Which(string) (string, error)
-	Depends(string) ([]string, error)
+	Which(*Info, string) error
+	Depends(*Info) error
 }
 
 func newManager(opt *args.Args) (Manager, error) {

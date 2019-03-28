@@ -12,35 +12,41 @@ import (
 )
 
 type dpkgManager struct {
-	cmd string
+	cmd  string
+	arch string
 }
 
 func dpkgNew(opt *args.Args) *dpkgManager {
 	cmd := opt.Get("os.pkg.exec")
-	log.Debug("dpkg new %s", cmd)
-	return &dpkgManager{cmd}
+	arch := opt.Get("arch")
+	log.Debug("dpkg new %s (arch:%s)", cmd, arch)
+	return &dpkgManager{cmd, arch}
 }
 
-func (m *dpkgManager) Which(filename string) (string, error) {
-	n := ""
+func (m *dpkgManager) Which(info *Info, filename string) error {
 	if out, err := utils.Exec(m.cmd, "-S", filename); err != nil {
-		return "", err
+		return err
 	} else {
-		return strings.Split(strings.TrimSpace(string(out)), ":")[0], nil
+		info.Pkg = strings.Split(strings.TrimSpace(string(out)), ":")[0]
 	}
-	return n, nil
+	return nil
 }
 
-func (m *dpkgManager) Depends(name string) ([]string, error) {
-	l := make([]string, 0)
-	out, err := utils.Exec(m.cmd+"-query", "-W", "-f ${Depends}", name)
+func (m *dpkgManager) Depends(info *Info) error {
+	if info.Deps == nil {
+		info.Deps = make([]*Info, 0)
+	}
+	out, err := utils.Exec(m.cmd+"-query", "-W", "-f ${Depends}", info.Pkg+":"+m.arch)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	log.Debug("%s", out)
 	for _, line := range strings.Split(string(out), ",") {
 		n := strings.Split(strings.TrimSpace(line), " ")[0]
 		log.Debug("%s", n)
+		i := &Info{}
+		i.Pkg = n
+		info.Deps = append(info.Deps, i)
 	}
-	return l, nil
+	return nil
 }

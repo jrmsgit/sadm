@@ -13,22 +13,21 @@ func Check(opt *args.Args, filename string) error {
 	var (
 		m       Manager
 		err     error
-		pkgname string
-		deps    []string
 	)
 	m, err = newManager(opt)
 	if err != nil {
 		return err
 	}
-	pkgname, err = m.Which(filename)
+	info := &Info{}
+	err = m.Which(info, filename)
 	if err != nil {
 		return err
 	}
-	log.Debug("%s provided by %s", filename, pkgname)
-	deps, err = m.Depends(pkgname)
+	log.Debug("%s provided by %s", filename, info.Pkg)
+	err = m.Depends(info)
 	if err != nil {
 		return err
 	}
-	log.Debug("%s depends on %v", pkgname, deps)
+	log.Debug("%s depends on %v", info.Pkg, info.Deps)
 	return nil
 }

@@ -4,20 +4,24 @@
 package fs
 
 import (
-	"strings"
+	"errors"
+	"os"
 
 	"github.com/jrmsdev/sadm/internal/log"
-	"github.com/jrmsdev/sadm/internal/utils"
 )
 
 func Mkdir(dirname string) error {
-	out, err := utils.Exec("mkdir", "-vp", dirname)
+	s, err := os.Stat(dirname)
 	if err != nil {
-		return err
+		if err := os.MkdirAll(dirname, 0755); err != nil {
+			log.Debug("%s", err)
+			return err
+		}
+		log.Printf("mkdir %s", dirname)
+		return nil
 	}
-	outs := strings.TrimSpace(string(out))
-	if outs != "" {
-		log.Print(outs)
+	if !s.IsDir() {
+		return errors.New(sprintf("%s exists but is not a dir", dirname))
 	}
 	return nil
 }

@@ -4,8 +4,11 @@
 package fs
 
 import (
+	"errors"
 	"os"
 )
+
+var DiffErr = errors.New("diff error")
 
 type Info struct {
 	os.FileInfo

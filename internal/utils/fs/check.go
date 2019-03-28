@@ -12,8 +12,13 @@ import (
 )
 
 func Check(opt *args.Args, files ...string) error {
-	if _, err := checkDiff(opt, files...); err != nil {
+	if l, err := checkDiff(opt, files...); err != nil {
 		return err
+	} else {
+		if len(l) > 0 {
+			log.Errorf("%s fs diff found: %d files", opt.Service, len(l))
+			return DiffErr
+		}
 	}
 	return nil
 }

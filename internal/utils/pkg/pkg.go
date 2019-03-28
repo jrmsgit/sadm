@@ -12,6 +12,7 @@ import (
 
 type Manager interface {
 	Which(string) (string, error)
+	Depends(string) ([]string, error)
 }
 
 func newManager(opt *args.Args) (Manager, error) {
@@ -27,5 +28,5 @@ func newManager(opt *args.Args) (Manager, error) {
 	if pkgman == "dpkg" {
 		return dpkgNew(opt), nil
 	}
-	return nil, errors.New("invalid os pkg manager "+pkgman)
+	return nil, errors.New("invalid os pkg manager " + pkgman)
 }

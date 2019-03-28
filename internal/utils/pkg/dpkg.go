@@ -30,3 +30,17 @@ func (m *dpkgManager) Which(filename string) (string, error) {
 	}
 	return n, nil
 }
+
+func (m *dpkgManager) Depends(name string) ([]string, error) {
+	l := make([]string, 0)
+	out, err := utils.Exec(m.cmd+"-query", "-W", "-f ${Depends}", name)
+	if err != nil {
+		return nil, err
+	}
+	log.Debug("%s", out)
+	for _, line := range strings.Split(string(out), ",") {
+		n := strings.Split(strings.TrimSpace(line), " ")[0]
+		log.Debug("%s", n)
+	}
+	return l, nil
+}

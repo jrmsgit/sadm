@@ -10,14 +10,25 @@ import (
 
 func Check(opt *args.Args, filename string) error {
 	log.Debug("check %s", filename)
-	if m, err := newManager(opt); err != nil {
+	var (
+		m       Manager
+		err     error
+		pkgname string
+		deps    []string
+	)
+	m, err = newManager(opt)
+	if err != nil {
 		return err
-	} else {
-		if pkgname, err := m.Which(filename); err != nil {
-			return err
-		} else {
-			log.Debug("%s provided by %s", filename, pkgname)
-		}
 	}
+	pkgname, err = m.Which(filename)
+	if err != nil {
+		return err
+	}
+	log.Debug("%s provided by %s", filename, pkgname)
+	deps, err = m.Depends(pkgname)
+	if err != nil {
+		return err
+	}
+	log.Debug("%s depends on %v", pkgname, deps)
 	return nil
 }

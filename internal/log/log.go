@@ -67,7 +67,7 @@ func debugErrorf(format string, args ...interface{}) {
 	tag := "E: "
 	_, fn, ln, ok := runtime.Caller(3)
 	if ok {
-		tag = fmt.Sprintf("%s:%d E: ", fn, ln)
+		tag = fmt.Sprintf("%s:%d: E: ", fn, ln)
 	}
 	fmt.Fprintf(os.Stderr, tag+format+"\n", args...)
 }
@@ -97,7 +97,7 @@ func debug(format string, args ...interface{}) {
 	tag := "D: "
 	_, fn, ln, ok := runtime.Caller(2)
 	if ok {
-		tag = fmt.Sprintf("%s:%d ", fn, ln)
+		tag = fmt.Sprintf("%s:%d: ", fn, ln)
 	}
 	fmt.Fprintf(os.Stderr, tag+format+"\n", args...)
 }

@@ -17,15 +17,26 @@ type dpkgManager struct {
 	exclude map[string]bool
 	depdone map[string]bool
 	deps    map[string]bool
+	prune   map[string]bool
+	files   map[string]bool
 }
 
 func dpkgNew(opt *args.Args) *dpkgManager {
 	cmd := opt.Get("os.pkg.exec")
 	arch := opt.Get("arch")
 	log.Debug("dpkg new %s (arch:%s)", cmd, arch)
-	return &dpkgManager{cmd, arch, pkgExclude(opt),
-		make(map[string]bool), make(map[string]bool)}
+	return &dpkgManager{
+		cmd,
+		arch,
+		pkgExclude(opt),
+		make(map[string]bool),
+		make(map[string]bool),
+		filesPrune(opt),
+		make(map[string]bool),
+	}
 }
+
+// load pkg exclude config
 
 func pkgExclude(opt *args.Args) map[string]bool {
 	excl := make(map[string]bool)
@@ -38,6 +49,21 @@ func pkgExclude(opt *args.Args) map[string]bool {
 	return excl
 }
 
+// load files prune config
+
+func filesPrune(opt *args.Args) map[string]bool {
+	prune := make(map[string]bool)
+	for _, n := range strings.Split(opt.Get("os.pkg.prune"), " ") {
+		n = strings.TrimSpace(n)
+		if n != "" {
+			prune[n] = true
+		}
+	}
+	return prune
+}
+
+// which package provides filename?
+
 func (m *dpkgManager) Which(info *Info, filename string) error {
 	if out, err := utils.Exec(m.cmd, "-S", filename); err != nil {
 		return err
@@ -46,6 +72,8 @@ func (m *dpkgManager) Which(info *Info, filename string) error {
 	}
 	return nil
 }
+
+// find package dependencies
 
 func (m *dpkgManager) Depends(info *Info, pkgname string) error {
 	log.Debug("find deps: %s", pkgname)
@@ -85,6 +113,8 @@ func (m *dpkgManager) Depends(info *Info, pkgname string) error {
 	return nil
 }
 
+// find package fullname (ie: name:arch)
+
 func (m *dpkgManager) fullname(pkgname string) string {
 	if pkgname == "" {
 		return ""
@@ -99,4 +129,45 @@ func (m *dpkgManager) fullname(pkgname string) string {
 		return pkgname + ":" + m.arch
 	}
 	return strings.TrimSpace(outs)
+}
+
+// list files provided by package
+
+func (m *dpkgManager) List(info *Info, pkgname string) error {
+	log.Debug("list %s", pkgname)
+	out, err := utils.Exec(m.cmd, "-L", pkgname)
+	if err != nil {
+		return err
+	}
+	count := 0
+	pruneCount := 0
+	for _, fn := range strings.Split(string(out), "\n") {
+		fn = strings.TrimSpace(fn)
+		if fn == "" {
+			continue
+		}
+		if !m.files[fn] {
+			if m.pruneFile(fn) {
+				log.Warnf("pkg prune %s", fn)
+				pruneCount += 1
+			} else {
+				log.Debug("file append: %s", fn)
+				info.Files = append(info.Files, fn)
+				m.files[fn] = true
+				count += 1
+			}
+		}
+	}
+	log.Debug("append count %s: %d", pkgname, count)
+	log.Debug("prune count %s: %d", pkgname, pruneCount)
+	return nil
+}
+
+func (m *dpkgManager) pruneFile(name string) bool {
+	for prune := range m.prune {
+		if strings.HasPrefix(name, prune) {
+			return true
+		}
+	}
+	return false
 }

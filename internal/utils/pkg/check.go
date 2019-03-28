@@ -24,24 +24,34 @@ func Check(opt *args.Args, filename string) error {
 		return err
 	}
 	log.Debug("which %s: %s", filename, info.Pkg)
-	err = check(m, info, info.Pkg)
+	err = getDeps(m, info, info.Pkg)
 	if err != nil {
 		return err
 	}
-	log.Debug("%s depends on %d packages", info.Pkg, len(info.Deps))
+	log.Debug("%s requires %d packages", info.Pkg, len(info.Deps))
 	log.Debug("%s deps %v", info.Pkg, info.Deps)
+	//~ info.Files = make([]string, 0)
+	err = getFiles(m, info, info.Pkg)
+	if err != nil {
+		return err
+	}
+	log.Debug("%s requires %d files", info.Pkg, len(info.Files))
+	//~ log.Debug("%s files %v", info.Pkg, info.Files)
+	for _, fn := range info.Files {
+		log.Print(fn)
+	}
 	return nil
 }
 
-func check(m Manager, info *Info, pkgname string) error {
-	log.Debug("check pkg %s", pkgname)
+func getDeps(m Manager, info *Info, pkgname string) error {
+	log.Debug("get deps %s", pkgname)
 	err := m.Depends(info, pkgname)
 	if err != nil {
 		return err
 	}
 	for _, dep := range info.Deps {
 		r := &Info{}
-		err = check(m, r, dep.Pkg)
+		err = getDeps(m, r, dep.Pkg)
 		if err != nil {
 			if err == depDone {
 				continue
@@ -56,5 +66,23 @@ func check(m Manager, info *Info, pkgname string) error {
 			}
 		}
 	}
+	return nil
+}
+
+func getFiles(m Manager, info *Info, pkgname string) error {
+	log.Debug("get files %s", pkgname)
+	err := m.List(info, pkgname)
+	if err != nil {
+		return err
+	}
+	for _, dep := range info.Deps {
+		r := &Info{}
+		err = getFiles(m, r, dep.Pkg)
+		if err != nil {
+			return err
+		}
+		info.Files = append(info.Files, r.Files...)
+	}
+	//~ info.Files = r.Files
 	return nil
 }

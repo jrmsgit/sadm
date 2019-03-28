@@ -1,5 +1,6 @@
 {
   "pkg": "pkgng",
   "pkg.exec": "/usr/bin/pkg",
-  "pkg.exclude": ""
+  "pkg.exclude": "",
+  "pkg.prune": ""
 }

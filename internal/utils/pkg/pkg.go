@@ -13,8 +13,9 @@ import (
 var depDone = errors.New("depdone")
 
 type Info struct {
-	Pkg  string
-	Deps []*Info
+	Pkg   string
+	Deps  []*Info
+	Files []string
 }
 
 func (i *Info) String() string {
@@ -24,6 +25,7 @@ func (i *Info) String() string {
 type Manager interface {
 	Which(*Info, string) error
 	Depends(*Info, string) error
+	List(*Info, string) error
 }
 
 func newManager(opt *args.Args) (Manager, error) {

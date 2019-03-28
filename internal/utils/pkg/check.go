@@ -8,7 +8,7 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func Check(opt *args.Args, filename string) error {
+func Check(opt *args.Args, filename string) (*Info, error) {
 	log.Debug("check %s", filename)
 	var (
 		m   Manager
@@ -16,31 +16,31 @@ func Check(opt *args.Args, filename string) error {
 	)
 	m, err = newManager(opt)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	info := &Info{}
 	err = m.Which(info, filename)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	log.Debug("which %s: %s", filename, info.Pkg)
 	err = getDeps(m, info, info.Pkg)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	log.Debug("%s requires %d packages", info.Pkg, len(info.Deps))
 	//~ log.Debug("%s deps %v", info.Pkg, info.Deps)
 	//~ info.Files = make([]string, 0)
 	err = getFiles(m, info, info.Pkg)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	log.Debug("%s requires %d files", info.Pkg, len(info.Files))
 	//~ log.Debug("%s files %v", info.Pkg, info.Files)
-	for _, fn := range info.Files {
-		log.Print(fn)
-	}
-	return nil
+	//~ for _, fn := range info.Files {
+		//~ log.Print(fn)
+	//~ }
+	return info, nil
 }
 
 func getDeps(m Manager, info *Info, pkgname string) error {

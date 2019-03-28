@@ -20,7 +20,7 @@ var (
 
 func init() {
 	var (
-		defCfg = filepath.FromSlash("/usr/local/etc/sadm.json")
+		defCfg = filepath.Join(cfg.Prefix, "etc", "sadm.json")
 		defLog = "error"
 	)
 	flag.StringVar(&cfgfile, "config", defCfg, "`file` path")

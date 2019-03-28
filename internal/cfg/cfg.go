@@ -12,7 +12,7 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-var prefix = "/usr/local"
+var Prefix = "/usr/local"
 
 type Cfg struct {
 	EnvDir string
@@ -23,7 +23,7 @@ func New(src io.ReadCloser) (*Cfg, error) {
 	log.Debug("new")
 	config := new(Cfg)
 	setDefaults(config)
-	log.Debug("prefix=%s", prefix)
+	log.Debug("prefix=%s", Prefix)
 	defer src.Close()
 	if blob, err := ioutil.ReadAll(src); err != nil {
 		return nil, err
@@ -40,7 +40,7 @@ func New(src io.ReadCloser) (*Cfg, error) {
 }
 
 func setDefaults(config *Cfg) {
-	p := filepath.FromSlash(prefix)
+	p := filepath.FromSlash(Prefix)
 	config.EnvDir = filepath.Join(p, "etc", "sadm.d")
 	config.CfgDir = filepath.Join(p, "etc", "sadm")
 }

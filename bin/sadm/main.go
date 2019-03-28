@@ -66,7 +66,7 @@ func main() {
 			os.Exit(2)
 		} else {
 			// load env
-			envfile := filepath.Join(config.EnvDir, envname+".json")
+			envfile := filepath.Join(config.CfgDir, envname+".json")
 			if envfh, err := os.Open(envfile); err != nil {
 				log.Error(err)
 				os.Exit(5)

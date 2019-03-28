@@ -58,9 +58,9 @@ func (a *Args) source(src map[string]string) {
 func (a *Args) init() error {
 	log.Debug("init %s", a.Type)
 	files := []string{
-		filepath.Join(a.cfg.CfgDir, "env", "config.json"),
-		filepath.Join(a.cfg.CfgDir, "env", a.Type, "config.json"),
-		filepath.Join(a.cfg.CfgDir, "env", a.Type, a.OS+".json"),
+		filepath.Join(a.cfg.LibDir, "env", "config.json"),
+		filepath.Join(a.cfg.LibDir, "env", a.Type, "config.json"),
+		filepath.Join(a.cfg.LibDir, "env", a.Type, a.OS+".json"),
 	}
 	for _, fn := range files {
 		if fh, err := os.Open(fn); err != nil {
@@ -110,8 +110,8 @@ func (a *Args) loadOS() error {
 		return errors.New("runtime OS is empty!?? =(")
 	}
 	files := []string{
-		filepath.Join(a.cfg.CfgDir, "os", "config.json"),
-		filepath.Join(a.cfg.CfgDir, "os", a.OS+".json"),
+		filepath.Join(a.cfg.LibDir, "os", "config.json"),
+		filepath.Join(a.cfg.LibDir, "os", a.OS+".json"),
 	}
 	for _, fn := range files {
 		if fh, err := os.Open(fn); err != nil {
@@ -129,9 +129,9 @@ func (a *Args) loadOS() error {
 
 func (a *Args) loadService() error {
 	files := []string{
-		filepath.Join(a.cfg.CfgDir, "service", "config.json"),
-		filepath.Join(a.cfg.CfgDir, "service", a.Service, "config.json"),
-		filepath.Join(a.cfg.CfgDir, "service", a.Service, a.OS+".json"),
+		filepath.Join(a.cfg.LibDir, "service", "config.json"),
+		filepath.Join(a.cfg.LibDir, "service", a.Service, "config.json"),
+		filepath.Join(a.cfg.LibDir, "service", a.Service, a.OS+".json"),
 	}
 	for _, fn := range files {
 		if fh, err := os.Open(fn); err != nil {

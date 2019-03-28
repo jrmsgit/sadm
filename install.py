@@ -29,14 +29,14 @@ def install():
 	os.system('go install ./bin/sadm')
 	print('%s/bin/sadm installed' % prefix)
 
-	os.system('mkdir -vp %s/etc/sadm.d' % prefix)
+	os.system('mkdir -vp %s/etc/sadm' % prefix)
 	os.system('cp -va etc/sadm.json %s/etc' % prefix)
 
-	os.system('mkdir -vp %s/etc/sadm' % prefix)
-	os.system('cp -va etc/sadm/* %s/etc/sadm' % prefix)
+	os.system('mkdir -vp %s/lib/sadm' % prefix)
+	os.system('cp -va lib/* %s/lib/sadm' % prefix)
 
 def uninstall():
-	os.system('rm -rfv %s/bin/sadm %s/etc/sadm.d %s/etc/sadm %s/etc/sadm.json' % (prefix, prefix, prefix, prefix))
+	os.system('rm -rfv %s/bin/sadm %s/etc/sadm %s/etc/sadm.json %s/lib/sadm' % (prefix, prefix, prefix, prefix))
 
 if __name__ == '__main__':
 	flags = args.parse_args()

@@ -6,6 +6,8 @@ package fs
 import (
 	"fmt"
 	"os"
+
+	"github.com/jrmsdev/sadm/internal/log"
 )
 
 var sprintf = fmt.Sprintf
@@ -20,6 +22,15 @@ func newInfo(base os.FileInfo, filename string) *Info {
 		base,
 		filename,
 	}
+}
+
+func newFileInfo(filename string) (*Info, error) {
+	s, err := os.Stat(filename)
+	if err != nil {
+		log.Debug("%s", err)
+		return nil, err
+	}
+	return newInfo(s, filename), nil
 }
 
 func (i *Info) String() string {

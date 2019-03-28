@@ -43,19 +43,10 @@ func (j *Jail) Create() error {
 	if err != nil {
 		return err
 	}
-	// copy jail files
-	err = j.copyFiles(info, destdir)
+	// sync jail files
+	err = fs.Sync(destdir, info.Files...)
 	if err != nil {
 		return err
 	}
-	return nil
-}
-
-func (j *Jail) copyFiles(info *pkg.Info, destdir string) error {
-	log.Debug("copy files %s %d %s", info.Pkg, len(info.Files), destdir)
-	//~ for _, fn := range info.Files {
-		//~ dst := destdir+fn
-		//~ if err := fs.Copy(fn, dst)
-	//~ }
 	return nil
 }

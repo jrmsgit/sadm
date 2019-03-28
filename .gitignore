@@ -1,3 +1,5 @@
 internal/cfg/build.go
 etc/sadm.json
 var/
+coverage.html
+coverage.out

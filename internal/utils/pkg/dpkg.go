@@ -50,7 +50,7 @@ func (m *dpkgManager) Which(info *Info, filename string) error {
 func (m *dpkgManager) Depends(info *Info, pkgname string) error {
 	log.Debug("find deps: %s", pkgname)
 	if m.depdone[pkgname] {
-		log.Debug("deps done: %s", pkgname)
+		//~ log.Debug("deps done: %s", pkgname)
 		return depDone
 	}
 	if info.Deps == nil {
@@ -60,7 +60,7 @@ func (m *dpkgManager) Depends(info *Info, pkgname string) error {
 	if err != nil {
 		return err
 	}
-	log.Debug("deps %s: %s", pkgname, out)
+	//~ log.Debug("deps %s: %s", pkgname, out)
 	for _, line := range strings.Split(string(out), ",") {
 		n := strings.Split(strings.TrimSpace(line), " ")[0]
 		fulln := m.fullname(n)

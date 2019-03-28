@@ -51,7 +51,7 @@ func check(m Manager, info *Info, pkgname string) error {
 		}
 		if info.Pkg != "" {
 			for _, d := range r.Deps {
-				log.Debug("dep append %s: %s", info.Pkg, d.Pkg)
+				//~ log.Debug("dep append %s: %s", info.Pkg, d.Pkg)
 				info.Deps = append(info.Deps, d)
 			}
 		}

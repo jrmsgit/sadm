@@ -11,8 +11,8 @@ import (
 func Check(opt *args.Args, filename string) error {
 	log.Debug("check %s", filename)
 	var (
-		m       Manager
-		err     error
+		m   Manager
+		err error
 	)
 	m, err = newManager(opt)
 	if err != nil {
@@ -24,10 +24,20 @@ func Check(opt *args.Args, filename string) error {
 		return err
 	}
 	log.Debug("%s provided by %s", filename, info.Pkg)
-	err = m.Depends(info)
+	return check(m, info, info.Pkg)
+}
+
+func check(m Manager, info *Info, pkgname string) error {
+	err := m.Depends(info, pkgname)
 	if err != nil {
 		return err
 	}
-	log.Debug("%s depends on %v", info.Pkg, info.Deps)
+	for _, dep := range info.Deps {
+		err = check(m, info, dep.Pkg)
+		if err != nil {
+			return err
+		}
+	}
+	log.Debug("%s depends on %d packages", info.Pkg, len(info.Deps))
 	return nil
 }

@@ -32,11 +32,12 @@ func (m *dpkgManager) Which(info *Info, filename string) error {
 	return nil
 }
 
-func (m *dpkgManager) Depends(info *Info) error {
+func (m *dpkgManager) Depends(info *Info, pkgname string) error {
+	log.Debug("find deps %s", pkgname)
 	if info.Deps == nil {
 		info.Deps = make([]*Info, 0)
 	}
-	out, err := utils.Exec(m.cmd+"-query", "-W", "-f ${Depends}", info.Pkg+":"+m.arch)
+	out, err := utils.Exec(m.cmd+"-query", "-W", "-f", "${Depends}", pkgname+":"+m.arch)
 	if err != nil {
 		return err
 	}

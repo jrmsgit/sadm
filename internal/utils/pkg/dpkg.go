@@ -76,7 +76,7 @@ func (m *dpkgManager) Which(info *Info, filename string) error {
 // find package dependencies
 
 func (m *dpkgManager) Depends(info *Info, pkgname string) error {
-	log.Debug("find deps: %s", pkgname)
+	//~ log.Debug("find deps: %s", pkgname)
 	if m.depdone[pkgname] {
 		//~ log.Debug("deps done: %s", pkgname)
 		return depDone
@@ -134,7 +134,7 @@ func (m *dpkgManager) fullname(pkgname string) string {
 // list files provided by package
 
 func (m *dpkgManager) List(info *Info, pkgname string) error {
-	log.Debug("list %s", pkgname)
+	//~ log.Debug("list %s", pkgname)
 	out, err := utils.Exec(m.cmd, "-L", pkgname)
 	if err != nil {
 		return err
@@ -151,15 +151,15 @@ func (m *dpkgManager) List(info *Info, pkgname string) error {
 				log.Warnf("pkg prune %s", fn)
 				pruneCount += 1
 			} else {
-				log.Debug("file append: %s", fn)
+				//~ log.Debug("file append: %s", fn)
 				info.Files = append(info.Files, fn)
 				m.files[fn] = true
 				count += 1
 			}
 		}
 	}
-	log.Debug("append count %s: %d", pkgname, count)
-	log.Debug("prune count %s: %d", pkgname, pruneCount)
+	//~ log.Debug("append count %s: %d", pkgname, count)
+	//~ log.Debug("prune count %s: %d", pkgname, pruneCount)
 	return nil
 }
 

@@ -16,8 +16,10 @@ func (j *Jail) Check() error {
 		return errors.New(sprintf("%s service exec is empty", j.args.Service))
 	}
 	log.Debug("%s cmd %s", j.args.Service, cmd)
+	// service pkg check
 	if err := pkg.Check(j.args, cmd); err != nil {
 		return err
 	}
+	// jail files check
 	return nil
 }

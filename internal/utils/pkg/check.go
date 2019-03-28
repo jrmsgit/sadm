@@ -29,7 +29,7 @@ func Check(opt *args.Args, filename string) error {
 		return err
 	}
 	log.Debug("%s requires %d packages", info.Pkg, len(info.Deps))
-	log.Debug("%s deps %v", info.Pkg, info.Deps)
+	//~ log.Debug("%s deps %v", info.Pkg, info.Deps)
 	//~ info.Files = make([]string, 0)
 	err = getFiles(m, info, info.Pkg)
 	if err != nil {
@@ -44,7 +44,7 @@ func Check(opt *args.Args, filename string) error {
 }
 
 func getDeps(m Manager, info *Info, pkgname string) error {
-	log.Debug("get deps %s", pkgname)
+	//~ log.Debug("get deps %s", pkgname)
 	err := m.Depends(info, pkgname)
 	if err != nil {
 		return err
@@ -70,7 +70,7 @@ func getDeps(m Manager, info *Info, pkgname string) error {
 }
 
 func getFiles(m Manager, info *Info, pkgname string) error {
-	log.Debug("get files %s", pkgname)
+	//~ log.Debug("get files %s", pkgname)
 	err := m.List(info, pkgname)
 	if err != nil {
 		return err
@@ -83,6 +83,5 @@ func getFiles(m Manager, info *Info, pkgname string) error {
 		}
 		info.Files = append(info.Files, r.Files...)
 	}
-	//~ info.Files = r.Files
 	return nil
 }

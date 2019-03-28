@@ -6,7 +6,6 @@ package fs
 import (
 	"errors"
 	"os"
-	"path/filepath"
 
 	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
@@ -38,10 +37,6 @@ func checkDiff(opt *args.Args, files ...string) ([]string, error) {
 			src os.FileInfo
 			dst os.FileInfo
 		)
-		fn := filepath.Clean(fn)
-		if fn == "." || fn == "/" {
-			continue
-		}
 		src, err = os.Stat(fn)
 		if err != nil {
 			return nil, err

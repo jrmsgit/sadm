@@ -4,6 +4,7 @@
 package pkg
 
 import (
+	"path/filepath"
 	"strings"
 
 	"github.com/jrmsdev/sadm/internal/env/args"
@@ -142,8 +143,8 @@ func (m *dpkgManager) List(info *Info, pkgname string) error {
 	count := 0
 	pruneCount := 0
 	for _, fn := range strings.Split(string(out), "\n") {
-		fn = strings.TrimSpace(fn)
-		if fn == "" {
+		fn = filepath.Clean(strings.TrimSpace(fn))
+		if fn == "." || fn == "/" {
 			continue
 		}
 		if !m.files[fn] {

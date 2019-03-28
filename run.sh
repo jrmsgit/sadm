@@ -1,4 +1,5 @@
 #!/bin/sh -eu
 sadm_args=${sadm_args:-''}
 cfg=./etc/devel.json
-go run ./bin/sadm/main.go -config $cfg $sadm_args $@
+GOBIN=${PWD}/build go install -i ./bin/sadm
+./build/sadm -config $cfg $sadm_args $@

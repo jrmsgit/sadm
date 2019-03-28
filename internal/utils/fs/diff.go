@@ -4,10 +4,12 @@
 package fs
 
 import (
+	"os"
+
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func Diff(src, dst string) bool {
+func diff(src, dst os.FileInfo) bool {
 	log.Debug("diff %s %s", src, dst)
 	return false
 }

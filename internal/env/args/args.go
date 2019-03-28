@@ -11,6 +11,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 
 	"github.com/jrmsdev/sadm/internal/cfg"
 	"github.com/jrmsdev/sadm/internal/log"
@@ -147,7 +148,7 @@ func (a *Args) loadService() error {
 }
 
 func (a *Args) Get(opt string) string {
-	return a.db[opt]
+	return strings.TrimSpace(a.db[opt])
 }
 
 func (a *Args) Update(opt, val string) error {

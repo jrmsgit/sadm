@@ -24,7 +24,7 @@ func init() {
 		defLog = "error"
 	)
 	flag.StringVar(&cfgfile, "config", defCfg, "`file` path")
-	flag.StringVar(&loglevel, "log", defLog, "`level`: debug, error or quiet")
+	flag.StringVar(&loglevel, "log", defLog, "`level`: debug, warn, error or quiet")
 }
 
 func usage() {

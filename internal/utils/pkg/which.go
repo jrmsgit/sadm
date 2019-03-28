@@ -6,26 +6,23 @@ package pkg
 import (
 	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
-	"github.com/jrmsdev/sadm/internal/utils/fs"
 )
 
-func Check(opt *args.Args, filename string) (*Info, error) {
+func Which(opt *args.Args, filename string) (*Info, error) {
 	log.Debug("check %s", filename)
 	var (
-		err  error
-		info *Info
+		m   Manager
+		err error
 	)
-	info, err = Which(opt, filename)
+	m, err = newManager(opt)
 	if err != nil {
 		return nil, err
 	}
-	err = List(opt, info)
+	info := &Info{}
+	err = m.Which(info, filename)
 	if err != nil {
 		return nil, err
 	}
-	err = fs.Check(opt, info.Files...)
-	if err != nil {
-		return nil, err
-	}
+	log.Debug("which %s: %s", filename, info.Pkg)
 	return info, nil
 }

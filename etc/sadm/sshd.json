@@ -1,5 +1,5 @@
 {
   "type": "jail",
   "service": "sshd",
-  "destdir": "./devel"
+  "destdir": "./var"
 }

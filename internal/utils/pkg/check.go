@@ -38,7 +38,7 @@ func Check(opt *args.Args, filename string) (*Info, error) {
 	log.Debug("%s requires %d files", info.Pkg, len(info.Files))
 	//~ log.Debug("%s files %v", info.Pkg, info.Files)
 	//~ for _, fn := range info.Files {
-		//~ log.Print(fn)
+	//~ log.Print(fn)
 	//~ }
 	return info, nil
 }

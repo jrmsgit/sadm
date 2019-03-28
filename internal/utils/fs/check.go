@@ -39,12 +39,13 @@ func checkDiff(opt *args.Args, files ...string) ([]string, error) {
 		if err != nil {
 			return nil, err
 		}
-		dst, err = os.Stat(destdir+fn)
+		dstfn := destdir + fn
+		dst, err = os.Stat(dstfn)
 		if err != nil {
 			log.Warn(err)
 			l = append(l, fn)
 		} else {
-			if diff(src, dst) {
+			if diff(newInfo(src, fn), newInfo(dst, dstfn)) {
 				l = append(l, fn)
 			}
 		}

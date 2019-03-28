@@ -4,12 +4,31 @@
 package fs
 
 import (
-	"os"
-
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func diff(src, dst os.FileInfo) bool {
+func diff(src, dst *Info) bool {
 	log.Debug("diff %s %s", src, dst)
-	return false
+	fail := false
+	if src.IsDir() && !dst.IsDir() {
+		log.Printf("diff type\n      is dir %s\n     not dir %s", src, dst)
+		fail = true
+	}
+	if !src.IsDir() && dst.IsDir() {
+		log.Printf("diff type\n     not dir %s\n      is dir %s", src, dst)
+		fail = true
+	}
+	if src.Size() != dst.Size() {
+		log.Printf("diff size\n     %d %s\n     %d %s", src.Size(), src, dst.Size(), dst)
+		fail = true
+	}
+	if src.ModTime() != dst.ModTime() {
+		log.Printf("diff modtime\n     %s %s\n     %s %s", src.ModTime(), src, dst.ModTime(), dst)
+		fail = true
+	}
+	if src.Mode() != dst.Mode() {
+		log.Printf("diff mode\n     %s %s\n     %s %s", src.Mode(), src, dst.Mode(), dst)
+		fail = true
+	}
+	return fail
 }

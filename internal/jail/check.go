@@ -9,7 +9,6 @@ import (
 	"path/filepath"
 
 	"github.com/jrmsdev/sadm/internal/log"
-	"github.com/jrmsdev/sadm/internal/utils/fs"
 	"github.com/jrmsdev/sadm/internal/utils/pkg"
 )
 
@@ -31,18 +30,8 @@ func (j *Jail) Check() error {
 	}
 	log.Debug("%s cmd %s", j.args.Service, cmd)
 	// service pkg
-	if info, err := pkg.Check(j.args, cmd); err != nil {
+	if _, err := pkg.Check(j.args, cmd); err != nil {
 		return err
-	} else {
-		// jail files
-		if err := j.checkFiles(info); err != nil {
-			return err
-		}
 	}
 	return nil
-}
-
-func (j *Jail) checkFiles(info *pkg.Info) error {
-	log.Debug("check files: %s", info.Pkg)
-	return fs.Check(j.args, info.Files...)
 }

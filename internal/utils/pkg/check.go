@@ -6,6 +6,7 @@ package pkg
 import (
 	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/internal/utils/fs"
 )
 
 func Check(opt *args.Args, filename string) (*Info, error) {
@@ -36,10 +37,10 @@ func Check(opt *args.Args, filename string) (*Info, error) {
 		return nil, err
 	}
 	log.Debug("%s requires %d files", info.Pkg, len(info.Files))
-	//~ log.Debug("%s files %v", info.Pkg, info.Files)
-	//~ for _, fn := range info.Files {
-	//~ log.Print(fn)
-	//~ }
+	err = fs.Check(opt, info.Files...)
+	if err != nil {
+		return nil, err
+	}
 	return info, nil
 }
 

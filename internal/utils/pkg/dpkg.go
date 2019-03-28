@@ -96,7 +96,7 @@ func (m *dpkgManager) fullname(pkgname string) string {
 	}
 	outs := string(out)
 	if len(strings.Split(outs, "\n")) > 2 {
-		return pkgname+":"+m.arch
+		return pkgname + ":" + m.arch
 	}
 	return strings.TrimSpace(outs)
 }

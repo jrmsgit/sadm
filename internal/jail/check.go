@@ -14,12 +14,6 @@ import (
 )
 
 func (j *Jail) Check() error {
-	// service executable file
-	cmd := j.args.Get("service.exec")
-	if cmd == "" {
-		return errors.New(sprintf("%s service exec is empty", j.args.Service))
-	}
-	log.Debug("%s cmd %s", j.args.Service, cmd)
 	// jail destdir
 	destdir := filepath.Clean(j.args.Get("destdir"))
 	if destdir == "" {
@@ -30,6 +24,12 @@ func (j *Jail) Check() error {
 		log.Debug("%s", err)
 		return err
 	}
+	// service executable file
+	cmd := j.args.Get("service.exec")
+	if cmd == "" {
+		return errors.New(sprintf("%s service exec is empty", j.args.Service))
+	}
+	log.Debug("%s cmd %s", j.args.Service, cmd)
 	// service pkg
 	if info, err := pkg.Check(j.args, cmd); err != nil {
 		return err

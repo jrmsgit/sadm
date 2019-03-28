@@ -5,4 +5,5 @@ package env
 
 type Manager interface {
 	Check() error
+	Create() error
 }

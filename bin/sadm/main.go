@@ -37,8 +37,8 @@ func usage() {
 }
 
 var validAction = map[string]bool{
-	"dump": true,
-	"check": true,
+	"dump":   true,
+	"check":  true,
 	"create": true,
 	"remove": true,
 }

@@ -24,6 +24,9 @@ func Run(e *Env, action string) error {
 			return err
 		}
 		return service.Check(e.args)
+	} else if action == "create" {
+		return e.ctl.Create()
 	}
-	return errors.New("invalid action: " + action)
+	log.Debug("invalid action %s", action)
+	return errors.New("run invalid action " + action)
 }

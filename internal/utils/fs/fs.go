@@ -4,11 +4,11 @@
 package fs
 
 import (
-	"errors"
+	"fmt"
 	"os"
 )
 
-var DiffErr = errors.New("diff error")
+var sprintf = fmt.Sprintf
 
 type Info struct {
 	os.FileInfo

@@ -36,9 +36,7 @@ func (j *Jail) Check() error {
 	} else {
 		// jail files
 		if err := j.checkFiles(info); err != nil {
-			if err != fs.DiffErr {
-				return err
-			}
+			return err
 		}
 	}
 	return nil

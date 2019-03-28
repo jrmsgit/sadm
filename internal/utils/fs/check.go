@@ -4,6 +4,7 @@
 package fs
 
 import (
+	"errors"
 	"os"
 	"path/filepath"
 
@@ -15,9 +16,10 @@ func Check(opt *args.Args, files ...string) error {
 	if l, err := checkDiff(opt, files...); err != nil {
 		return err
 	} else {
-		if len(l) > 0 {
-			log.Errorf("%s fs diff found: %d files", opt.Service, len(l))
-			return DiffErr
+		llen := len(l)
+		if llen > 0 {
+			log.Debug("fs diff found: %s %d", opt.Service, llen)
+			return errors.New(sprintf("%s fs diff found: %d files", opt.Service, llen))
 		}
 	}
 	return nil

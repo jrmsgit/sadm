@@ -8,25 +8,32 @@ import (
 )
 
 func diff(src, dst *Info) bool {
-	log.Debug("diff %s %s", src, dst)
 	fail := false
 	isdir := src.IsDir()
 	if src.IsDir() && !dst.IsDir() {
-		log.Warnf("diff type\n      is dir %s\n     not dir %s", src, dst)
+		log.Printf("diff type is dir %s not dir %s", src, dst)
 		fail = true
 	}
 	if !src.IsDir() && dst.IsDir() {
-		log.Warnf("diff type\n     not dir %s\n      is dir %s", src, dst)
+		log.Printf("diff type not dir %s is dir %s", src, dst)
 		fail = true
 	}
 	if !isdir && (src.Size() != dst.Size()) {
-		log.Warnf("diff size\n     %d %s\n     %d %s", src.Size(), src, dst.Size(), dst)
+		log.Printf("diff size %d %s %d %s", src.Size(), src, dst.Size(), dst)
 		fail = true
 	}
 	if src.Mode().Perm() != dst.Mode().Perm() {
-		log.Warnf("diff mode\n     %o %s\n     %o %s",
+		log.Printf("diff mode %o %s %o %s",
 			src.Mode().Perm(), src, dst.Mode().Perm(), dst)
 		fail = true
+	}
+	if !isdir {
+		ssum := checksum(src.Filename())
+		dsum := checksum(dst.Filename())
+		if ssum != dsum {
+			log.Printf("diff checksum %s %s %s %s", ssum, src, dsum, dst)
+			fail = true
+		}
 	}
 	return fail
 }

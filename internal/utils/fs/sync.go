@@ -4,6 +4,7 @@
 package fs
 
 import (
+	"errors"
 	"path/filepath"
 	"sort"
 
@@ -45,9 +46,18 @@ func Sync(destdir string, files ...string) error {
 }
 
 func syncDir(destdir string, src *Info) error {
-	return nil
+	return Mkdir(destdir+src.Filename())
 }
 
 func syncFile(destdir string, src *Info) error {
+	if !src.Mode().IsRegular() {
+		e := errors.New(sprintf("%s unsupported file type %s", src, src.Mode()))
+		log.Debug("%s", e)
+		return e
+	}
+	dst := destdir+src.Filename()
+	if err := Copy(dst, src.Filename()); err != nil {
+		return err
+	}
 	return nil
 }

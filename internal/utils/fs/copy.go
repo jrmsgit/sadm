@@ -13,8 +13,8 @@ import (
 func Copy(dst, src string) error {
 	var (
 		err error
-		sfh io.ReadCloser
-		dfh io.WriteCloser
+		sfh *os.File
+		dfh *os.File
 	)
 	sfh, err = os.Open(src)
 	if err != nil {
@@ -29,6 +29,11 @@ func Copy(dst, src string) error {
 		return err
 	}
 	defer dfh.Close()
+	err = dfh.Truncate(0)
+	if err != nil {
+		log.Debug("%s", err)
+		return err
+	}
 	_, err = io.Copy(dfh, sfh)
 	if err != nil {
 		log.Debug("%s", err)

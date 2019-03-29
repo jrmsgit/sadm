@@ -83,6 +83,7 @@ func main() {
 				os.Exit(5)
 			} else {
 				// create env
+				defer envfh.Close()
 				if environ, err := env.New(config, envname, envfh); err != nil {
 					log.Error(err)
 					os.Exit(3)

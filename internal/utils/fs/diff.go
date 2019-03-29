@@ -22,12 +22,8 @@ func diff(src, dst *Info) bool {
 		log.Warnf("diff size\n     %d %s\n     %d %s", src.Size(), src, dst.Size(), dst)
 		fail = true
 	}
-	if src.ModTime() != dst.ModTime() {
-		log.Warnf("diff modtime\n     %s %s\n     %s %s", src.ModTime(), src, dst.ModTime(), dst)
-		fail = true
-	}
 	if src.Mode() != dst.Mode() {
-		log.Warnf("diff mode\n     %s %s\n     %s %s", src.Mode(), src, dst.Mode(), dst)
+		log.Warnf("diff mode\n     %o %s\n     %o %s", src.Mode(), src, dst.Mode(), dst)
 		fail = true
 	}
 	return fail

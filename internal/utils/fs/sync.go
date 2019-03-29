@@ -46,7 +46,14 @@ func Sync(destdir string, files ...string) error {
 }
 
 func syncDir(destdir string, src *Info) error {
-	return Mkdir(destdir+src.Filename())
+	dst := destdir + src.Filename()
+	if err := Mkdir(dst); err != nil {
+		return err
+	}
+	if err := Chmod(dst, src.Mode()); err != nil {
+		return err
+	}
+	return nil
 }
 
 func syncFile(destdir string, src *Info) error {
@@ -55,8 +62,11 @@ func syncFile(destdir string, src *Info) error {
 		log.Debug("%s", e)
 		return e
 	}
-	dst := destdir+src.Filename()
+	dst := destdir + src.Filename()
 	if err := Copy(dst, src.Filename()); err != nil {
+		return err
+	}
+	if err := Chmod(dst, src.Mode()); err != nil {
 		return err
 	}
 	return nil

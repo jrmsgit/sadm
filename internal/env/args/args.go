@@ -33,16 +33,18 @@ func New(config *cfg.Cfg, env string, src map[string]string) (*Args, error) {
 	a.db = make(map[string]string)
 	a.Env = env
 	a.setRuntime()
-	a.Type = src["type"]
+	a.Type = strings.TrimSpace(src["type"])
 	if err := a.init(); err != nil {
 		return nil, err
 	}
 	if err := a.loadOS(); err != nil {
 		return nil, err
 	}
-	a.Service = src["service"]
-	if err := a.loadService(); err != nil {
-		return nil, err
+	a.Service = strings.TrimSpace(src["service"])
+	if a.Service != "" {
+		if err := a.loadService(); err != nil {
+			return nil, err
+		}
 	}
 	a.source(src)
 	//~ log.Debug("new %#v", a)
@@ -56,6 +58,9 @@ func (a *Args) source(src map[string]string) {
 }
 
 func (a *Args) init() error {
+	if a.Type == "" {
+		return errors.New("env type is empty")
+	}
 	log.Debug("init %s", a.Type)
 	files := []string{
 		filepath.Join(a.cfg.LibDir, "env", "config.json"),

@@ -22,7 +22,7 @@ var (
 )
 
 var argsinit = map[string]string{
-	"type": "sadm",
+	"type":    "sadm",
 	"service": "",
 }
 
@@ -36,7 +36,7 @@ func init() {
 }
 
 var validCmd = map[string]bool{
-	"pkg.list":   true,
+	"pkg.list": true,
 }
 
 func usage() {

@@ -140,6 +140,9 @@ func (m *dpkgManager) List(info *Info, pkgname string) error {
 	if err != nil {
 		return err
 	}
+	if info.FilesPrune == nil {
+		info.FilesPrune = make([]string, 0)
+	}
 	count := 0
 	pruneCount := 0
 	for _, fn := range strings.Split(string(out), "\n") {
@@ -150,6 +153,7 @@ func (m *dpkgManager) List(info *Info, pkgname string) error {
 		if !m.files[fn] {
 			if m.pruneFile(fn) {
 				log.Warnf("pkg prune %s", fn)
+				info.FilesPrune = append(info.FilesPrune, fn)
 				pruneCount += 1
 			} else {
 				//~ log.Debug("file append: %s", fn)

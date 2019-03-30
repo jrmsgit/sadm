@@ -13,9 +13,10 @@ import (
 var depDone = errors.New("depdone")
 
 type Info struct {
-	Pkg   string
-	Deps  []*Info
-	Files []string
+	Pkg        string
+	Deps       []*Info
+	Files      []string
+	FilesPrune []string
 }
 
 func (i *Info) String() string {

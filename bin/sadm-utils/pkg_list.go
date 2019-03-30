@@ -41,5 +41,10 @@ func pkgReport(info *pkg.Info) error {
 	for _, fn := range info.Files {
 		log.Printf("  %s", fn)
 	}
+	log.Printf("Files Prune (%d):", len(info.FilesPrune))
+	sort.Strings(info.FilesPrune)
+	for _, fn := range info.FilesPrune {
+		log.Printf("  %s", fn)
+	}
 	return nil
 }

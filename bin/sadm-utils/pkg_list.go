@@ -5,6 +5,7 @@ package main
 
 import (
 	"errors"
+	"sort"
 	"strings"
 
 	"github.com/jrmsdev/sadm/internal/env/args"
@@ -25,6 +26,20 @@ func pkgList(opt *args.Args, cmdargs []string) error {
 	info.Pkg = pkgname
 	if err := pkg.List(opt, info); err != nil {
 		return err
+	}
+	return pkgReport(info)
+}
+
+func pkgReport(info *pkg.Info) error {
+	log.Printf("Package: %s", info.Pkg)
+	log.Printf("Deps (%d):", len(info.Deps))
+	for _, dep := range info.Deps {
+		log.Printf("  %s", dep.Pkg)
+	}
+	log.Printf("Files (%d):", len(info.Files))
+	sort.Strings(info.Files)
+	for _, fn := range info.Files {
+		log.Printf("  %s", fn)
 	}
 	return nil
 }

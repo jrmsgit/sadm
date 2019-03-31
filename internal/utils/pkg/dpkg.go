@@ -66,20 +66,22 @@ func filesPrune(opt *args.Args) map[string]bool {
 // which package provides filename?
 
 func (m *dpkgManager) Which(info *Info, filename string) error {
+	log.Debug("which %s", filename)
 	if out, err := utils.Exec(m.cmd, "-S", filename); err != nil {
 		return err
 	} else {
 		info.Pkg = m.fullname(strings.Split(strings.TrimSpace(string(out)), ":")[0])
 	}
+	log.Debug("which %s: %s", filename, info.Pkg)
 	return nil
 }
 
 // find package dependencies
 
 func (m *dpkgManager) Depends(info *Info, pkgname string) error {
-	//~ log.Debug("find deps: %s", pkgname)
+	log.Debug("find deps: %s", pkgname)
 	if m.depdone[pkgname] {
-		//~ log.Debug("deps done: %s", pkgname)
+		log.Debug("deps done: %s", pkgname)
 		return depDone
 	}
 	if info.Deps == nil {
@@ -90,12 +92,14 @@ func (m *dpkgManager) Depends(info *Info, pkgname string) error {
 		return err
 	}
 	//~ log.Debug("deps %s: %s", pkgname, out)
-	for _, line := range strings.Split(string(out), ",") {
-		n := strings.Split(strings.TrimSpace(line), " ")[0]
+	for _, line := range strings.Split(strings.TrimSpace(string(out)), ",") {
+		line = strings.TrimSpace(line)
+		n := strings.TrimSpace(strings.Split(line, " ")[0])
 		fulln := m.fullname(n)
 		if n == "" || fulln == "" {
 			continue
 		}
+		log.Debug("%s dep: %s (%s)", pkgname, fulln, n)
 		_, excl := m.exclude[n]
 		if excl {
 			log.Warnf("pkg exclude %s (%s)", fulln, n)

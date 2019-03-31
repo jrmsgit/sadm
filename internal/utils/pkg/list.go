@@ -4,6 +4,8 @@
 package pkg
 
 import (
+	"strings"
+
 	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
 )
@@ -18,11 +20,15 @@ func List(opt *args.Args, info *Info) error {
 	if err != nil {
 		return err
 	}
-	err = getDeps(m, info, info.Pkg)
+	// list deps
+	pkgDeps := strings.Split(strings.TrimSpace(opt.Get("service.pkg.deps")), " ")
+	log.Debug("pkg.deps %s: %v", info.Pkg, pkgDeps)
+	err = getDeps(m, info, info.Pkg, pkgDeps...)
 	if err != nil {
 		return err
 	}
 	log.Debug("%s requires %d packages", info.Pkg, len(info.Deps))
+	// list files
 	err = getFiles(m, info, info.Pkg)
 	if err != nil {
 		return err
@@ -31,31 +37,53 @@ func List(opt *args.Args, info *Info) error {
 	return nil
 }
 
-func getDeps(m Manager, info *Info, pkgname string) error {
+func getDeps(m Manager, info *Info, pkgname string, pkgdeps ...string) error {
+	log.Debug("get deps: %s", pkgname)
 	err := m.Depends(info, pkgname)
 	if err != nil {
 		return err
 	}
 	for _, dep := range info.Deps {
-		r := &Info{}
-		err = getDeps(m, r, dep.Pkg)
-		if err != nil {
-			if err == depDone {
-				continue
-			} else {
-				return err
-			}
+		if err := lsDeps(m, info, dep.Pkg); err != nil {
+			return err
 		}
-		if info.Pkg != "" {
-			for _, d := range r.Deps {
-				info.Deps = append(info.Deps, d)
-			}
+	}
+	for _, n := range pkgdeps {
+		n = strings.TrimSpace(n)
+		if n == "" {
+			continue
+		}
+		if err := lsDeps(m, info, n); err != nil {
+			return err
+		} else {
+			d := new(Info)
+			d.Pkg = n
+			info.Deps = append(info.Deps, d)
 		}
 	}
 	return nil
 }
 
+func lsDeps(m Manager, info *Info, pkgname string) error {
+	log.Debug("lsdeps: %s (%s)", pkgname, info.Pkg)
+	r := &Info{}
+	err := getDeps(m, r, pkgname)
+	if err != nil {
+		if err == depDone {
+			return nil
+		} else {
+			return err
+		}
+	}
+	for _, d := range r.Deps {
+		log.Debug("%s <- %s", pkgname, d.Pkg)
+		info.Deps = append(info.Deps, d)
+	}
+	return nil
+}
+
 func getFiles(m Manager, info *Info, pkgname string) error {
+	log.Debug("get files: %s", pkgname)
 	err := m.List(info, pkgname)
 	if err != nil {
 		return err

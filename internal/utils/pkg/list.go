@@ -22,7 +22,7 @@ func List(opt *args.Args, info *Info) error {
 	}
 	// list deps
 	pkgDeps := strings.Split(strings.TrimSpace(opt.Get("service.pkg.deps")), " ")
-	log.Debug("pkg.deps %s: %v", info.Pkg, pkgDeps)
+	//~ log.Debug("pkg.deps %s: %v", info.Pkg, pkgDeps)
 	err = getDeps(m, info, info.Pkg, pkgDeps...)
 	if err != nil {
 		return err
@@ -38,7 +38,7 @@ func List(opt *args.Args, info *Info) error {
 }
 
 func getDeps(m Manager, info *Info, pkgname string, pkgdeps ...string) error {
-	log.Debug("get deps: %s", pkgname)
+	//~ log.Debug("get deps: %s", pkgname)
 	err := m.Depends(info, pkgname)
 	if err != nil {
 		return err
@@ -65,7 +65,7 @@ func getDeps(m Manager, info *Info, pkgname string, pkgdeps ...string) error {
 }
 
 func lsDeps(m Manager, info *Info, pkgname string) error {
-	log.Debug("lsdeps: %s (%s)", pkgname, info.Pkg)
+	//~ log.Debug("lsdeps: %s (%s)", pkgname, info.Pkg)
 	r := &Info{}
 	err := getDeps(m, r, pkgname)
 	if err != nil {
@@ -76,14 +76,14 @@ func lsDeps(m Manager, info *Info, pkgname string) error {
 		}
 	}
 	for _, d := range r.Deps {
-		log.Debug("%s <- %s", pkgname, d.Pkg)
+		//~ log.Debug("%s <- %s", pkgname, d.Pkg)
 		info.Deps = append(info.Deps, d)
 	}
 	return nil
 }
 
 func getFiles(m Manager, info *Info, pkgname string) error {
-	log.Debug("get files: %s", pkgname)
+	//~ log.Debug("get files: %s", pkgname)
 	err := m.List(info, pkgname)
 	if err != nil {
 		return err

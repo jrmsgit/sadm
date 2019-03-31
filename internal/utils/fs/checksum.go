@@ -17,6 +17,6 @@ func checksum(filename string) string {
 		return "ERROR:" + filename
 	}
 	sum := adler32.Checksum(blob)
-	log.Debug("checksum %s %d", filename, sum)
+	//~ log.Debug("checksum %s %d", filename, sum)
 	return sprintf("%d", sum)
 }

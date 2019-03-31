@@ -21,6 +21,7 @@ func Check(opt *args.Args, files ...string) error {
 			return errors.New(sprintf("%s fs diff found: %d files", opt.Service, llen))
 		}
 	}
+	log.Printf("%s: %d files checked", opt.Env, len(files))
 	return nil
 }
 

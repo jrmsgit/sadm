@@ -17,8 +17,9 @@ import (
 var sprintf = fmt.Sprintf
 
 var (
-	cfgfile  string
-	loglevel string
+	cfgfile     string
+	loglevel    string
+	argsService string
 )
 
 var argsinit = map[string]string{
@@ -33,6 +34,8 @@ func init() {
 	)
 	flag.StringVar(&cfgfile, "config", defCfg, "`file` path")
 	flag.StringVar(&loglevel, "log", defLog, "`level`: debug, warn, error or quiet")
+	// args init flags
+	flag.StringVar(&argsService, "service", "", "service `name`")
 }
 
 var validCmd = map[string]bool{
@@ -83,6 +86,7 @@ func dispatch(cmd string, cmdargs []string) {
 		log.Error(err)
 		os.Exit(3)
 	}
+	argsinit["service"] = argsService
 	opt, err = args.New(config, "sadm", argsinit)
 	if err != nil {
 		log.Error(err)

@@ -16,5 +16,6 @@ func NewReadCloser(s string) *ReadCloser {
 }
 
 func (r *ReadCloser) Close() error {
+	r.Reset()
 	return nil
 }

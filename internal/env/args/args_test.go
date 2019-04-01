@@ -10,7 +10,7 @@ import (
 )
 
 var tsrc = map[string]string{
-	"type": "sadm",
+	"type": "testing",
 }
 
 func TestMain(m *testing.M) {
@@ -23,5 +23,10 @@ func TestArgs(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	t.Log(x)
+	if x.Get("type") != "testing" {
+		t.Errorf("type: %s", x.Get("type"))
+	}
+	if x.Env != "test" {
+		t.Errorf("env name: %s", x.Env)
+	}
 }

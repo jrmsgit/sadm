@@ -37,9 +37,9 @@ func TestCfg(t *testing.T) {
 		t.Fatal(err)
 	}
 	if x.LibDir != fp.Join(Prefix, "lib", "sadm") {
-		t.Errorf("LibDir %s", x.LibDir)
+		t.Errorf("LibDir: %s", x.LibDir)
 	}
 	if x.CfgDir != fp.Join(Prefix, "etc", "sadm") {
-		t.Errorf("CfgDir %s", x.CfgDir)
+		t.Errorf("CfgDir: %s", x.CfgDir)
 	}
 }

@@ -16,11 +16,6 @@ branches:
   only:
     - master
 
-matrix:
-  include:
-    - os: osx
-      go: "1.x"
-
 install:
   - ./install.py --prefix ${GOPATH}
 

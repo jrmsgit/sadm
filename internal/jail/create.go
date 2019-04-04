@@ -5,7 +5,6 @@ package jail
 
 import (
 	"errors"
-	"os"
 	"path/filepath"
 
 	"github.com/jrmsdev/sadm/internal/log"
@@ -20,13 +19,8 @@ func (j *Jail) Create() error {
 		return errors.New(sprintf("%s jail destdir is empty", j.args.Service))
 	}
 	log.Debug("destdir %s", destdir)
-	e := "error"
-	if s, err := os.Stat(destdir); err == nil {
-		if s.IsDir() {
-			e = sprintf("%s dir already exists", destdir)
-		} else {
-			e = sprintf("%s already exists", destdir)
-		}
+	if fs.Exists(destdir) {
+		e := sprintf("%s already exists", destdir)
 		log.Debug("%s", e)
 		return errors.New(e)
 	}

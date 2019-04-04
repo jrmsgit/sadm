@@ -5,10 +5,10 @@ package jail
 
 import (
 	"errors"
-	"os"
 	"path/filepath"
 
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/internal/utils/fs"
 	"github.com/jrmsdev/sadm/internal/utils/pkg"
 )
 
@@ -21,15 +21,10 @@ func (j *Jail) Check() error {
 		return errors.New(e)
 	}
 	log.Debug("destdir %s", destdir)
-	if s, err := os.Stat(destdir); err != nil {
-		log.Debug("%s", err)
-		return err
-	} else {
-		if !s.IsDir() {
-			e := sprintf("%s exists but is not a dir", destdir)
-			log.Debug("%s", e)
-			return errors.New(e)
-		}
+	if !fs.Exists(destdir) {
+		e := sprintf("%s dir not found", destdir)
+		log.Debug("%s", e)
+		return errors.New(e)
 	}
 	// service executable file
 	cmd := j.args.Get("service.exec")

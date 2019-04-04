@@ -16,12 +16,20 @@ func (j *Jail) Check() error {
 	// jail destdir
 	destdir := filepath.Clean(j.args.Get("destdir"))
 	if destdir == "" {
-		return errors.New(sprintf("%s jail destdir is empty", j.args.Service))
+		e := sprintf("%s jail destdir is empty", j.args.Service)
+		log.Debug("%s", e)
+		return errors.New(e)
 	}
 	log.Debug("destdir %s", destdir)
-	if _, err := os.Stat(destdir); err != nil {
+	if s, err := os.Stat(destdir); err != nil {
 		log.Debug("%s", err)
 		return err
+	} else {
+		if !s.IsDir() {
+			e := sprintf("%s exists but is not a dir", destdir)
+			log.Debug("%s", e)
+			return errors.New(e)
+		}
 	}
 	// service executable file
 	cmd := j.args.Get("service.exec")

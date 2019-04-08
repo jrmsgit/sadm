@@ -7,6 +7,12 @@ from argparse import ArgumentParser
 
 prefix = '/usr/local'
 
+args = ArgumentParser(description = 'sadm installer')
+args.add_argument('--prefix', default = prefix, metavar = prefix,
+	help = 'install prefix')
+args.add_argument('--remove', action = 'store_true', default = False,
+	help = 'uninstall')
+
 def build_cfg(src_file):
 	dst_file = src_file[:-3]
 	with open(src_file, 'r') as src:
@@ -15,10 +21,6 @@ def build_cfg(src_file):
 				line = line.replace('[[PREFIX]]', prefix)
 				dst.write(line)
 	print('%s done' % dst_file)
-
-args = ArgumentParser(description = 'sadm installer')
-args.add_argument('--prefix', default = prefix, metavar = prefix, help = 'install prefix')
-args.add_argument('--remove', action = 'store_true', default = False, help = 'uninstall')
 
 def install():
 	os.environ['GOBIN'] = '%s/bin' % prefix
@@ -34,9 +36,14 @@ def install():
 
 	os.system('mkdir -vp %s/lib/sadm' % prefix)
 	os.system('cp -va lib/* %s/lib/sadm' % prefix)
+	os.system('rm -rf %s/lib/sadm/env/testing' % prefix)
 
 def uninstall():
-	os.system('rm -rfv %s/bin/sadm %s/etc/sadm %s/etc/sadm.json %s/lib/sadm' % (prefix, prefix, prefix, prefix))
+	cmd = 'rm -rfv %s/bin/sadm' % prefix
+	cmd += ' %s/etc/sadm' % prefix
+	cmd += ' %s/etc/sadm.json' % prefix
+	cmd += ' %s/lib/sadm' % prefix
+	os.system(cmd)
 
 if __name__ == '__main__':
 	flags = args.parse_args()

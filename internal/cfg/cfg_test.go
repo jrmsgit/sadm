@@ -5,8 +5,8 @@ package cfg
 
 import (
 	"bytes"
-	fp "path/filepath"
 	"os"
+	fp "path/filepath"
 	"testing"
 
 	"github.com/jrmsdev/sadm/internal/log"

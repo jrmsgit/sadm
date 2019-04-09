@@ -9,6 +9,14 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
+var ValidAction = map[string]bool{
+	"dump":   true,
+	"check":  true,
+	"create": true,
+	"start":  true,
+	"stop":   true,
+}
+
 func Run(e *Env, action string) error {
 	log.Debug("%s %s %s", action, e.args.Type, e.name)
 	if action == "dump" {

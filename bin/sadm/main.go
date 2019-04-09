@@ -30,17 +30,10 @@ func init() {
 func usage() {
 	log.Print("usage: sadm env action")
 	log.Print("actions:")
-	for n := range validAction {
+	for n := range env.ValidAction {
 		log.Printf("    %s", n)
 	}
 	log.Print("* run `sadm -help` for more information")
-}
-
-var validAction = map[string]bool{
-	"dump":   true,
-	"check":  true,
-	"create": true,
-	"remove": true,
 }
 
 func main() {
@@ -57,7 +50,7 @@ func main() {
 	} else if action == "" {
 		log.Errorf("no action")
 		argsok = false
-	} else if !validAction[action] {
+	} else if !env.ValidAction[action] {
 		log.Errorf("invalid action %s", action)
 		argsok = false
 	}

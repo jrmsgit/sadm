@@ -5,13 +5,16 @@ package service
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func start(env *args.Args) error {
-	log.Debug(env.Env)
+var sprintf = fmt.Sprintf
+
+func Run(action string, env *args.Args) error {
+	log.Debug("%s %s", action, env.Env)
 	if env.Service == "" {
 		return errors.New(sprintf("%s service is empty", env.Env))
 	}
@@ -21,6 +24,12 @@ func start(env *args.Args) error {
 		return errors.New(sprintf("%s service exec is empty", env.Service))
 	}
 	log.Debug("%s exec %s", env.Service, cmd)
-	log.Printf("%s %s started", env.Env, cmd)
-	return nil
+	if action == "start" {
+		return start(env)
+	//~ } else if action == "stop" {
+		//~ return stop(env)
+	}
+	msg := sprintf("%s invalid service action %s", env.Env, action)
+	log.Debug("%s", msg)
+	return errors.New(msg)
 }

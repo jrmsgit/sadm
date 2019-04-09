@@ -35,7 +35,7 @@ func Run(e *Env, action string) error {
 		if err := e.ctl.Start(); err != nil {
 			return err
 		}
-		return service.Start(e.args)
+		return service.Run(action, e.args)
 	}
 	log.Debug("invalid action %s", action)
 	return errors.New("run invalid action " + action)

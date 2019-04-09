@@ -25,11 +25,5 @@ func (j *Jail) Start() error {
 		log.Debug("%s", e)
 		return errors.New(e)
 	}
-	// get service executable file
-	cmd := j.args.Get("service.exec")
-	if cmd == "" {
-		return errors.New(sprintf("%s service exec is empty", j.args.Service))
-	}
-	log.Debug("%s exec %s", j.args.Service, cmd)
 	return nil
 }

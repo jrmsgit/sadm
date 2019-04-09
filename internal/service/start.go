@@ -8,9 +8,7 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func Check(opt *args.Args) error {
+func Start(opt *args.Args) error {
 	log.Debug(opt.Service)
-	//~ s, _ := opt.Dump()
-	//~ log.Print(s)
 	return nil
 }

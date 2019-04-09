@@ -7,6 +7,7 @@ import (
 	"errors"
 
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/internal/service"
 )
 
 var ValidAction = map[string]bool{
@@ -30,6 +31,11 @@ func Run(e *Env, action string) error {
 		return e.ctl.Check()
 	} else if action == "create" {
 		return e.ctl.Create()
+	} else if action == "start" {
+		if err := e.ctl.Start(); err != nil {
+			return err
+		}
+		return service.Start(e.args)
 	}
 	log.Debug("invalid action %s", action)
 	return errors.New("run invalid action " + action)

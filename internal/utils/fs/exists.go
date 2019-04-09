@@ -13,9 +13,9 @@ func Exists(filename string) bool {
 	s, err := os.Stat(filename)
 	if err == nil {
 		if s.IsDir() {
-			log.Debug("%s dir already exists", filename)
+			log.Debug("%s dir found", filename)
 		} else {
-			log.Debug("%s already exists", filename)
+			log.Debug("%s file found", filename)
 		}
 		return true
 	}

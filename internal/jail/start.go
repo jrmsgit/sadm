@@ -9,10 +9,9 @@ import (
 
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils/fs"
-	"github.com/jrmsdev/sadm/internal/utils/pkg"
 )
 
-func (j *Jail) Check() error {
+func (j *Jail) Start() error {
 	// check jail destdir
 	destdir := filepath.Clean(j.args.Get("destdir"))
 	if destdir == "" {
@@ -32,9 +31,5 @@ func (j *Jail) Check() error {
 		return errors.New(sprintf("%s service exec is empty", j.args.Service))
 	}
 	log.Debug("%s exec %s", j.args.Service, cmd)
-	// check service packages/files deps
-	if _, err := pkg.Check(j.args, cmd); err != nil {
-		return err
-	}
 	return nil
 }

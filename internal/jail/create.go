@@ -32,7 +32,7 @@ func (j *Jail) Create() error {
 	if cmd == "" {
 		return errors.New(sprintf("%s service exec is empty", j.args.Service))
 	}
-	log.Debug("%s cmd %s", j.args.Service, cmd)
+	log.Debug("%s exec %s", j.args.Service, cmd)
 	// service pkg
 	var (
 		info *pkg.Info

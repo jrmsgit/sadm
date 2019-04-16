@@ -4,14 +4,21 @@
 package jail
 
 import (
+	"errors"
+
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils/fs"
 	"github.com/jrmsdev/sadm/internal/utils/pkg"
 )
 
-func (j *Jail) Create(destdir, cmd string) error {
+func (j *Jail) Create() error {
 	// create destdir
-	if err := fs.Mkdir(destdir); err != nil {
+	if fs.Exists(j.destdir) {
+		err := errors.New(sprintf("%s already exists", j.destdir))
+		log.Debug("%s", err)
+		return err
+	}
+	if err := fs.Mkdir(j.destdir); err != nil {
 		return err
 	}
 	// service pkg
@@ -19,17 +26,20 @@ func (j *Jail) Create(destdir, cmd string) error {
 		info *pkg.Info
 		err  error
 	)
-	info, err = pkg.Which(j.args, cmd)
+	if err := j.checkServiceExec(); err != nil {
+		return err
+	}
+	info, err = pkg.Which(j.args, j.serviceExec)
 	if err != nil {
 		return err
 	}
-	log.Debug("which %s: %s", cmd, info.Pkg)
+	log.Debug("which %s: %s", j.serviceExec, info.Pkg)
 	err = pkg.List(j.args, info)
 	if err != nil {
 		return err
 	}
 	// sync jail files
-	err = fs.Sync(destdir, info.Files...)
+	err = fs.Sync(j.destdir, info.Files...)
 	if err != nil {
 		return err
 	}

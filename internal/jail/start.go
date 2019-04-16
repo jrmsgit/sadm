@@ -4,18 +4,13 @@
 package jail
 
 import (
-	"errors"
-
 	"github.com/jrmsdev/sadm/internal/log"
-	"github.com/jrmsdev/sadm/internal/utils/fs"
 )
 
-func (j *Jail) Start(destdir string) error {
-	// check jail destdir
-	if !fs.Exists(destdir) {
-		e := sprintf("%s dir not found", destdir)
-		log.Debug("%s", e)
-		return errors.New(e)
+func (j *Jail) Start() error {
+	log.Debug("start %s", j.args.Env)
+	if err := j.checkDestdir(); err != nil {
+		return err
 	}
 	return nil
 }

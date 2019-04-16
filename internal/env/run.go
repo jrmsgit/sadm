@@ -4,8 +4,6 @@
 package env
 
 import (
-	"errors"
-
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/service"
 )
@@ -27,16 +25,12 @@ func Run(e *Env, action string) error {
 			log.Print(s)
 			return nil
 		}
-	} else if action == "check" {
-		return e.ctl.Check()
-	} else if action == "create" {
-		return e.ctl.Create()
-	} else if action == "start" {
-		if err := e.ctl.Start(); err != nil {
-			return err
-		}
-		return service.Run(action, e.args)
 	}
-	log.Debug("invalid action %s", action)
-	return errors.New("run invalid action " + action)
+	if err := e.ctl.Dispatch(action); err != nil {
+		return err
+	}
+	if err := service.Run(action, e.args); err != nil {
+		return err
+	}
+	return nil
 }

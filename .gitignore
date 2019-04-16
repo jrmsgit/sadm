@@ -1,3 +1,4 @@
+*.swp
 internal/cfg/build.go
 etc/sadm.json
 build/

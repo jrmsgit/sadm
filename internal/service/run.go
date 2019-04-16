@@ -25,7 +25,7 @@ func Run(action string, env *args.Args) error {
 	}
 	log.Debug("%s exec %s", env.Service, cmd)
 	if action == "start" {
-		return start(env)
+		return start(env, cmd)
 	//~ } else if action == "stop" {
 		//~ return stop(env)
 	}

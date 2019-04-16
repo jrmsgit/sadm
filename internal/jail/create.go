@@ -4,35 +4,16 @@
 package jail
 
 import (
-	"errors"
-	"path/filepath"
-
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils/fs"
 	"github.com/jrmsdev/sadm/internal/utils/pkg"
 )
 
-func (j *Jail) Create() error {
-	// jail destdir
-	destdir := filepath.Clean(j.args.Get("destdir"))
-	if destdir == "" {
-		return errors.New(sprintf("%s jail destdir is empty", j.args.Service))
-	}
-	log.Debug("destdir %s", destdir)
-	if fs.Exists(destdir) {
-		e := sprintf("%s already exists", destdir)
-		log.Debug("%s", e)
-		return errors.New(e)
-	}
+func (j *Jail) Create(destdir, cmd string) error {
+	// create destdir
 	if err := fs.Mkdir(destdir); err != nil {
 		return err
 	}
-	// service executable file
-	cmd := j.args.Get("service.exec")
-	if cmd == "" {
-		return errors.New(sprintf("%s service exec is empty", j.args.Service))
-	}
-	log.Debug("%s exec %s", j.args.Service, cmd)
 	// service pkg
 	var (
 		info *pkg.Info

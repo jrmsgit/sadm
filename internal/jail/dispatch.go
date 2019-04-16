@@ -25,13 +25,21 @@ func (j *Jail) Dispatch(action string) error {
 		log.Debug("%s", err)
 		return err
 	}
-	if action == "check" {
-		return j.Check()
-	} else if action == "create" {
-		return j.Create()
-	} else if action == "start" {
-		return j.Start()
+	// service executable file
+	cmd := j.args.Get("service.exec")
+	if cmd == "" {
+		return errors.New(sprintf("%s service exec is empty", j.args.Service))
 	}
+	log.Debug("%s exec %s", j.args.Service, cmd)
+	// dispatch action
+	if action == "check" {
+		return j.Check(destdir, cmd)
+	} else if action == "create" {
+		return j.Create(destdir, cmd)
+	} else if action == "start" {
+		return j.Start(destdir)
+	}
+	// fail due to invalid action request
 	err := errors.New(sprintf("invalid jail action %s", action))
 	log.Debug("%s", err)
 	return err

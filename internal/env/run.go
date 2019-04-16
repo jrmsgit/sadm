@@ -30,7 +30,7 @@ func Run(e *Env, action string) error {
 		return err
 	}
 	if action == "start" || action == "stop" {
-		if err := service.Run(action, e.args); err != nil {
+		if err := service.Run(e.args, action); err != nil {
 			return err
 		}
 	}

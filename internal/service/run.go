@@ -13,7 +13,7 @@ import (
 
 var sprintf = fmt.Sprintf
 
-func Run(action string, env *args.Args) error {
+func Run(env *args.Args, action string) error {
 	log.Debug("%s %s", action, env.Env)
 	if env.Service == "" {
 		return errors.New(sprintf("%s service is empty", env.Env))

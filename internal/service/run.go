@@ -27,6 +27,7 @@ func Run(action string, env *args.Args) error {
 	if action == "start" {
 		return start(env, cmd)
 	}
-	log.Debug("ignore action %s", action)
-	return nil
+	msg := sprintf("%s invalid service action %s", env.Env, action)
+	log.Debug("%s", msg)
+	return errors.New(msg)
 }

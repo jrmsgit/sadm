@@ -6,21 +6,24 @@ package log
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 type logger struct {
-	Debug  func(string, ...interface{})
-	Errorf func(string, ...interface{})
-	Error  func(error)
-	Warnf  func(string, ...interface{})
-	Warn   func(error)
-	Printf func(string, ...interface{})
-	Print  func(...interface{})
+	Debug    func(string, ...interface{})
+	Errorf   func(string, ...interface{})
+	Error    func(error)
+	Warnf    func(string, ...interface{})
+	Warn     func(error)
+	Printf   func(string, ...interface{})
+	Print    func(...interface{})
 }
 
 var (
 	l *logger
+	shortIdx int
 )
 
 func Init(level string) error {
@@ -43,7 +46,22 @@ func Init(level string) error {
 		l.Printf = quietf
 		l.Print = quiet
 	}
+	shortIdx = getShortIdx()
 	return nil
+}
+
+func getShortIdx() int {
+	_, fn, _, ok := runtime.Caller(0)
+	if ok {
+		idx := strings.Index(fn, "sadm")
+		idx += 4 + len(string(filepath.Separator))
+		return idx
+	}
+	return 0
+}
+
+func shortFile(name string) string {
+	return name[shortIdx:]
 }
 
 func quietf(format string, args ...interface{}) {
@@ -67,7 +85,7 @@ func debugErrorf(format string, args ...interface{}) {
 	tag := "E: "
 	_, fn, ln, ok := runtime.Caller(3)
 	if ok {
-		tag = fmt.Sprintf("%s:%d: E: ", fn, ln)
+		tag = fmt.Sprintf("%s:%d: E: ", shortFile(fn), ln)
 	}
 	fmt.Fprintf(os.Stderr, tag+format+"\n", args...)
 }
@@ -97,7 +115,7 @@ func debug(format string, args ...interface{}) {
 	tag := "D: "
 	_, fn, ln, ok := runtime.Caller(2)
 	if ok {
-		tag = fmt.Sprintf("%s:%d: ", fn, ln)
+		tag = fmt.Sprintf("%s:%d: ", shortFile(fn), ln)
 	}
 	fmt.Fprintf(os.Stderr, tag+format+"\n", args...)
 }

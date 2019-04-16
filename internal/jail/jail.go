@@ -17,8 +17,8 @@ import (
 var sprintf = fmt.Sprintf
 
 type Jail struct {
-	args *args.Args
-	destdir string
+	args        *args.Args
+	destdir     string
 	serviceExec string
 }
 

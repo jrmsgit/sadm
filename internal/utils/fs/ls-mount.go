@@ -5,9 +5,10 @@ package fs
 
 import (
 	"path/filepath"
+	"strings"
 
 	"github.com/jrmsdev/sadm/internal/log"
-	//~ "github.com/jrmsdev/sadm/internal/utils"
+	"github.com/jrmsdev/sadm/internal/utils"
 )
 
 func LsMount(basedir string) ([]string, error) {
@@ -19,8 +20,10 @@ func LsMount(basedir string) ([]string, error) {
 		return l, err
 	}
 	log.Debug("abs: %s", d)
-	//~ if _, err := utils.Exec("/bin/mount", args...); err != nil {
-		//~ return l, err
-	//~ }
+	if out, err := utils.Exec("/bin/mount", "-l"); err != nil {
+		return l, err
+	} else {
+		log.Print(strings.TrimSpace(string(out)))
+	}
 	return l, nil
 }

@@ -4,17 +4,18 @@
 package fs
 
 import (
+	"strings"
+
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils"
 )
 
 func Umount(mnt string) error {
 	log.Debug("%s", mnt)
-	args := []string{"-v", mnt}
-	if out, err := utils.Exec("/bin/umount", args...); err != nil {
+	if out, err := utils.Exec("/bin/umount", "-v", mnt); err != nil {
 		return err
 	} else {
-		log.Print(out)
+		log.Print(strings.TrimSpace(string(out)))
 	}
 	return nil
 }

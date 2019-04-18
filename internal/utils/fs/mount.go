@@ -4,6 +4,8 @@
 package fs
 
 import (
+	"strings"
+
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils"
 )
@@ -16,7 +18,7 @@ func Mount(args []string) error {
 	if out, err := utils.Exec("/bin/mount", x...); err != nil {
 		return err
 	} else {
-		log.Print(out)
+		log.Print(strings.TrimSpace(string(out)))
 	}
 	return nil
 }

@@ -22,7 +22,7 @@ func Exec(command string, args ...string) ([]byte, error) {
 	cmd := exec.CommandContext(ctx, command, args...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Debug("%s", err)
+		log.Debug("%v %s", cmd.Args, err)
 		return nil, errors.New(strings.TrimSpace(string(out)))
 	}
 	return out, nil

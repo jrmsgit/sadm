@@ -1,7 +1,4 @@
 {
   "type": "jail",
-  "destdir": "/srv/sadm",
-  "mount.dev": "mount -t devtmpfs udev %s/dev",
-  "mount.proc": "mount -t proc proc %s/proc",
-  "mount.sys": "mount -t sysfs sysfs %s/sys"
+  "destdir": "/srv/sadm"
 }

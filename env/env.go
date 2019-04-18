@@ -156,6 +156,18 @@ func (a *Env) Get(opt string) string {
 	return strings.TrimSpace(a.db[opt])
 }
 
+func (a *Env) GetAll(opt string) map[string]string {
+	d := make(map[string]string)
+	x := opt+"."
+	for k, v := range a.db {
+		if strings.HasPrefix(k, x) {
+			n := strings.Replace(k, x, "", 1)
+			d[n] = strings.TrimSpace(v)
+		}
+	}
+	return d
+}
+
 func (a *Env) Update(opt, val string) error {
 	_, ok := a.db[opt]
 	if !ok {

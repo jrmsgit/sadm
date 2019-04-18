@@ -39,7 +39,7 @@ func init() {
 }
 
 var validCmd = map[string]bool{
-	"pkg.list": true,
+	"pkg.list":    true,
 	"fs.ls-mount": true,
 }
 

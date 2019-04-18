@@ -5,9 +5,13 @@ package fs
 
 import (
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/internal/utils"
 )
 
 func Mount(args []string) error {
-	log.Debug("mount %v", args)
+	log.Debug("%v", args)
+	if _, err := utils.Exec("/bin/mount", args...); err != nil {
+		return err
+	}
 	return nil
 }

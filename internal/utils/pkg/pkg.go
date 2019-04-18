@@ -6,7 +6,7 @@ package pkg
 import (
 	"errors"
 
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
@@ -29,7 +29,7 @@ type Manager interface {
 	List(*Info, string) error
 }
 
-func newManager(opt *args.Args) (Manager, error) {
+func newManager(opt *env.Env) (Manager, error) {
 	pkgman := opt.Get("os.pkg")
 	if pkgman == "" {
 		return nil, errors.New("os pkg manager not set")

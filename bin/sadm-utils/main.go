@@ -9,8 +9,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/cfg"
-	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
@@ -79,7 +79,7 @@ func dispatch(cmd string, cmdargs []string) {
 	var (
 		err    error
 		config *cfg.Cfg
-		opt    *args.Args
+		opt    *env.Env
 	)
 	config, err = readConfig()
 	if err != nil {
@@ -87,7 +87,7 @@ func dispatch(cmd string, cmdargs []string) {
 		os.Exit(3)
 	}
 	argsinit["service"] = argsService
-	opt, err = args.New(config, "sadm", argsinit)
+	opt, err = env.New(config, "sadm", argsinit)
 	if err != nil {
 		log.Error(err)
 		os.Exit(4)

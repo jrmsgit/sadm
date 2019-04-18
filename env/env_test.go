@@ -1,7 +1,7 @@
 // Copyright (c) Jeremías Casteglione <jrmsdev@gmail.com>
 // See LICENSE file.
 
-package args
+package env
 
 import (
 	"testing"
@@ -17,7 +17,7 @@ func TestMain(m *testing.M) {
 	test.Main(m)
 }
 
-func TestArgs(t *testing.T) {
+func TestEnv(t *testing.T) {
 	cfg := test.NewConfig("{}")
 	x, err := New(cfg, "test", tsrc)
 	if err != nil {
@@ -26,7 +26,7 @@ func TestArgs(t *testing.T) {
 	if x.Get("type") != "testing" {
 		t.Errorf("type: %s", x.Get("type"))
 	}
-	if x.Env != "test" {
-		t.Errorf("env name: %s", x.Env)
+	if x.Name != "test" {
+		t.Errorf("env name: %s", x.Name)
 	}
 }

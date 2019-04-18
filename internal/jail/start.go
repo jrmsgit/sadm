@@ -8,7 +8,7 @@ import (
 )
 
 func (j *Jail) Start() error {
-	log.Debug("start %s", j.args.Env)
+	log.Debug("start %s", j.env.Name)
 	if err := j.checkDestdir(); err != nil {
 		return err
 	}

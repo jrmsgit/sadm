@@ -10,7 +10,7 @@ import (
 )
 
 func (j *Jail) Dispatch(action string) error {
-	log.Debug("dispatch %s", j.args.Env)
+	log.Debug("dispatch %s", j.env.Name)
 	// dispatch action
 	if action == "check" {
 		return j.Check()

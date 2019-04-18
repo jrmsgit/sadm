@@ -4,12 +4,12 @@
 package pkg
 
 import (
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils/fs"
 )
 
-func Check(opt *args.Args, filename string) (*Info, error) {
+func Check(opt *env.Env, filename string) (*Info, error) {
 	log.Debug("check %s", filename)
 	var (
 		err  error

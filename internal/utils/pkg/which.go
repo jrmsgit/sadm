@@ -4,11 +4,11 @@
 package pkg
 
 import (
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func Which(opt *args.Args, filename string) (*Info, error) {
+func Which(opt *env.Env, filename string) (*Info, error) {
 	log.Debug("check %s", filename)
 	var (
 		m   Manager

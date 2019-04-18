@@ -7,27 +7,27 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
 var sprintf = fmt.Sprintf
 
-func Run(env *args.Args, action string) error {
-	log.Debug("%s %s", action, env.Env)
-	if env.Service == "" {
-		return errors.New(sprintf("%s service is empty", env.Env))
+func Run(ctx *env.Env, action string) error {
+	log.Debug("%s %s", action, ctx.Name)
+	if ctx.Service == "" {
+		return errors.New(sprintf("%s service is empty", ctx.Name))
 	}
 	// get service executable file
-	cmd := env.Get("service.exec")
+	cmd := ctx.Get("service.exec")
 	if cmd == "" {
-		return errors.New(sprintf("%s service exec is empty", env.Service))
+		return errors.New(sprintf("%s service exec is empty", ctx.Service))
 	}
-	log.Debug("%s exec %s", env.Service, cmd)
+	log.Debug("%s exec %s", ctx.Service, cmd)
 	if action == "start" {
-		return start(env, cmd)
+		return start(ctx, cmd)
 	}
-	msg := sprintf("%s invalid service action %s", env.Env, action)
+	msg := sprintf("%s invalid service action %s", ctx.Name, action)
 	log.Debug("%s", msg)
 	return errors.New(msg)
 }

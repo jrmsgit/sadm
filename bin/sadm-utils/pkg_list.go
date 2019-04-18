@@ -7,12 +7,12 @@ import (
 	"errors"
 	"sort"
 
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils/pkg"
 )
 
-func pkgList(opt *args.Args, cmdargs []string) error {
+func pkgList(opt *env.Env, cmdargs []string) error {
 	service := opt.Get("service")
 	if service == "" {
 		return errors.New("pkg.list no service name")

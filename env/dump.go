@@ -1,7 +1,7 @@
 // Copyright (c) Jeremías Casteglione <jrmsdev@gmail.com>
 // See LICENSE file.
 
-package args
+package env
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func (a *Args) Dump() (string, error) {
+func (a *Env) Dump() (string, error) {
 	log.Debug("dump")
 	if blob, err := json.MarshalIndent(a.db, "", "  "); err != nil {
 		return "{}", err

@@ -1,7 +1,7 @@
 // Copyright (c) Jeremías Casteglione <jrmsdev@gmail.com>
 // See LICENSE file.
 
-package env
+package ctl
 
 import (
 	"github.com/jrmsdev/sadm/internal/log"
@@ -16,21 +16,21 @@ var ValidAction = map[string]bool{
 	"stop":   true,
 }
 
-func Run(e *Env, action string) error {
-	log.Debug("%s %s %s", action, e.args.Type, e.name)
+func Run(x *Ctl, action string) error {
+	log.Debug("%s %s %s", action, x.env.Type, x.name)
 	if action == "dump" {
-		if s, err := e.args.Dump(); err != nil {
+		if s, err := x.env.Dump(); err != nil {
 			return err
 		} else {
 			log.Print(s)
 			return nil
 		}
 	}
-	if err := e.ctl.Dispatch(action); err != nil {
+	if err := x.man.Dispatch(action); err != nil {
 		return err
 	}
 	if action == "start" || action == "stop" {
-		if err := service.Run(e.args, action); err != nil {
+		if err := service.Run(x.env, action); err != nil {
 			return err
 		}
 	}

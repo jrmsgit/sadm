@@ -1,8 +1,11 @@
 // Copyright (c) Jeremías Casteglione <jrmsdev@gmail.com>
 // See LICENSE file.
 
-package env
+package ctl
 
-type Manager interface {
-	Dispatch(action string) (err error)
+import (
+	"testing"
+)
+
+func TestCtl(t *testing.T) {
 }

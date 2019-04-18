@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils"
 )
@@ -22,7 +22,7 @@ type dpkgManager struct {
 	files   map[string]bool
 }
 
-func dpkgNew(opt *args.Args) *dpkgManager {
+func dpkgNew(opt *env.Env) *dpkgManager {
 	cmd := opt.Get("os.pkg.exec")
 	arch := opt.Get("arch")
 	log.Debug("dpkg new %s (arch:%s)", cmd, arch)
@@ -39,7 +39,7 @@ func dpkgNew(opt *args.Args) *dpkgManager {
 
 // load pkg exclude config
 
-func pkgExclude(opt *args.Args) map[string]bool {
+func pkgExclude(opt *env.Env) map[string]bool {
 	excl := make(map[string]bool)
 	for _, n := range strings.Split(opt.Get("os.pkg.exclude"), " ") {
 		n = strings.TrimSpace(n)
@@ -52,7 +52,7 @@ func pkgExclude(opt *args.Args) map[string]bool {
 
 // load files prune config
 
-func filesPrune(opt *args.Args) map[string]bool {
+func filesPrune(opt *env.Env) map[string]bool {
 	prune := make(map[string]bool)
 	for _, n := range strings.Split(opt.Get("os.pkg.prune"), " ") {
 		n = strings.TrimSpace(n)

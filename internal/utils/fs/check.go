@@ -7,11 +7,11 @@ import (
 	"errors"
 	"os"
 
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func Check(opt *args.Args, files ...string) error {
+func Check(opt *env.Env, files ...string) error {
 	if l, err := checkDiff(opt, files...); err != nil {
 		return err
 	} else {
@@ -21,12 +21,12 @@ func Check(opt *args.Args, files ...string) error {
 			return errors.New(sprintf("%s fs diff found: %d files", opt.Service, llen))
 		}
 	}
-	log.Printf("%s: %d files checked", opt.Env, len(files))
+	log.Printf("%s: %d files checked", opt.Name, len(files))
 	return nil
 }
 
-func checkDiff(opt *args.Args, files ...string) ([]string, error) {
-	log.Debug("check diff %s: %d files", opt.Env, len(files))
+func checkDiff(opt *env.Env, files ...string) ([]string, error) {
+	log.Debug("check diff %s: %d files", opt.Name, len(files))
 	destdir := opt.Get("destdir")
 	if destdir != "" {
 		log.Debug("destdir %s", destdir)

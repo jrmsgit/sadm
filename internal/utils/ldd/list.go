@@ -7,12 +7,12 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils"
 )
 
-func List(opt *args.Args, filename string) (*Info, error) {
+func List(opt *env.Env, filename string) (*Info, error) {
 	x := opt.Get("ldd")
 	if x == "" {
 		x = "ldd"

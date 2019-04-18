@@ -12,17 +12,17 @@ import (
 )
 
 type logger struct {
-	Debug    func(string, ...interface{})
-	Errorf   func(string, ...interface{})
-	Error    func(error)
-	Warnf    func(string, ...interface{})
-	Warn     func(error)
-	Printf   func(string, ...interface{})
-	Print    func(...interface{})
+	Debug  func(string, ...interface{})
+	Errorf func(string, ...interface{})
+	Error  func(error)
+	Warnf  func(string, ...interface{})
+	Warn   func(error)
+	Printf func(string, ...interface{})
+	Print  func(...interface{})
 }
 
 var (
-	l *logger
+	l        *logger
 	shortIdx int
 )
 

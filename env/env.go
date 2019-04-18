@@ -1,7 +1,7 @@
 // Copyright (c) Jeremías Casteglione <jrmsdev@gmail.com>
 // See LICENSE file.
 
-package args
+package env
 
 import (
 	"encoding/json"
@@ -17,21 +17,21 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-type Args struct {
+type Env struct {
 	cfg     *cfg.Cfg
 	db      map[string]string
-	Env     string
+	Name    string
 	Type    string
 	OS      string
 	Service string
 }
 
-func New(config *cfg.Cfg, env string, src map[string]string) (*Args, error) {
-	log.Debug("new %s", env)
-	a := new(Args)
+func New(config *cfg.Cfg, name string, src map[string]string) (*Env, error) {
+	log.Debug("new %s", name)
+	a := new(Env)
 	a.cfg = config
 	a.db = make(map[string]string)
-	a.Env = env
+	a.Name = name
 	a.setRuntime()
 	a.Type = strings.TrimSpace(src["type"])
 	if err := a.init(); err != nil {
@@ -51,13 +51,13 @@ func New(config *cfg.Cfg, env string, src map[string]string) (*Args, error) {
 	return a, nil
 }
 
-func (a *Args) source(src map[string]string) {
+func (a *Env) source(src map[string]string) {
 	for k, v := range src {
 		a.db[k] = v
 	}
 }
 
-func (a *Args) init() error {
+func (a *Env) init() error {
 	if a.Type == "" {
 		return errors.New("env type is empty")
 	}
@@ -81,13 +81,13 @@ func (a *Args) init() error {
 	return nil
 }
 
-func (a *Args) setRuntime() {
+func (a *Env) setRuntime() {
 	a.OS = runtime.GOOS
 	a.db["os"] = a.OS
 	a.db["arch"] = runtime.GOARCH
 }
 
-func (a *Args) load(prefix string, fh io.ReadCloser) error {
+func (a *Env) load(prefix string, fh io.ReadCloser) error {
 	defer fh.Close()
 	src := make(map[string]string)
 	if blob, err := ioutil.ReadAll(fh); err != nil {
@@ -110,7 +110,7 @@ func (a *Args) load(prefix string, fh io.ReadCloser) error {
 	return nil
 }
 
-func (a *Args) loadOS() error {
+func (a *Env) loadOS() error {
 	if a.OS == "" {
 		return errors.New("runtime OS is empty!?? =(")
 	}
@@ -132,7 +132,7 @@ func (a *Args) loadOS() error {
 	return nil
 }
 
-func (a *Args) loadService() error {
+func (a *Env) loadService() error {
 	files := []string{
 		filepath.Join(a.cfg.LibDir, "service", "config.json"),
 		filepath.Join(a.cfg.LibDir, "service", a.Service, "config.json"),
@@ -152,11 +152,11 @@ func (a *Args) loadService() error {
 	return nil
 }
 
-func (a *Args) Get(opt string) string {
+func (a *Env) Get(opt string) string {
 	return strings.TrimSpace(a.db[opt])
 }
 
-func (a *Args) Update(opt, val string) error {
+func (a *Env) Update(opt, val string) error {
 	_, ok := a.db[opt]
 	if !ok {
 		return errors.New("invalid option " + opt)

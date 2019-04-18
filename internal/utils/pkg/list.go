@@ -6,11 +6,11 @@ package pkg
 import (
 	"strings"
 
-	"github.com/jrmsdev/sadm/internal/env/args"
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func List(opt *args.Args, info *Info) error {
+func List(opt *env.Env, info *Info) error {
 	log.Debug("list %s", info.Pkg)
 	var (
 		m   Manager

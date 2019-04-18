@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/jrmsdev/sadm/internal/cfg"
-	"github.com/jrmsdev/sadm/internal/env"
+	"github.com/jrmsdev/sadm/internal/ctl"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
@@ -30,7 +30,7 @@ func init() {
 func usage() {
 	log.Print("usage: sadm env action")
 	log.Print("actions:")
-	for n := range env.ValidAction {
+	for n := range ctl.ValidAction {
 		log.Printf("    %s", n)
 	}
 	log.Print("* run `sadm -help` for more information")
@@ -50,7 +50,7 @@ func main() {
 	} else if action == "" {
 		log.Errorf("no action")
 		argsok = false
-	} else if !env.ValidAction[action] {
+	} else if !ctl.ValidAction[action] {
 		log.Errorf("invalid action %s", action)
 		argsok = false
 	}
@@ -77,12 +77,12 @@ func main() {
 			} else {
 				// create env
 				defer envfh.Close()
-				if environ, err := env.New(config, envname, envfh); err != nil {
+				if env, err := ctl.New(config, envname, envfh); err != nil {
 					log.Error(err)
 					os.Exit(3)
 				} else {
 					// run env action
-					if err := env.Run(environ, action); err != nil {
+					if err := ctl.Run(env, action); err != nil {
 						log.Error(err)
 						os.Exit(4)
 					}

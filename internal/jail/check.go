@@ -9,11 +9,11 @@ import (
 )
 
 func (j *Jail) Check() error {
-	log.Debug("check %s", j.args.Env)
+	log.Debug("check %s", j.env.Name)
 	if err := j.checkDestdir(); err != nil {
 		return err
 	}
-	if _, err := pkg.Check(j.args, j.serviceExec); err != nil {
+	if _, err := pkg.Check(j.env, j.serviceExec); err != nil {
 		return err
 	}
 	return nil

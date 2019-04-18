@@ -1,7 +1,7 @@
 // Copyright (c) Jeremías Casteglione <jrmsdev@gmail.com>
 // See LICENSE file.
 
-package env
+package ctl
 
 import (
 	"encoding/json"
@@ -10,26 +10,26 @@ import (
 	"io"
 	"io/ioutil"
 
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/cfg"
-	"github.com/jrmsdev/sadm/internal/env/args"
 	"github.com/jrmsdev/sadm/internal/jail"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
 var sprintf = fmt.Sprintf
 
-type Env struct {
+type Ctl struct {
 	name string
-	args *args.Args
-	ctl  Manager
+	env  *env.Env
+	man  Manager
 	//~ cfg  *cfg.Cfg
 }
 
-func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Env, error) {
+func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Ctl, error) {
 	log.Debug("new %s", name)
-	environ := new(Env)
-	environ.name = name
-	//~ environ.cfg = config
+	x := new(Ctl)
+	x.name = name
+	//~ x.cfg = config
 	defer src.Close()
 	// parse args
 	if blob, err := ioutil.ReadAll(src); err != nil {
@@ -39,37 +39,37 @@ func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Env, error) {
 		if err := json.Unmarshal(blob, &a); err != nil {
 			return nil, err
 		}
-		environ.args, err = args.New(config, name, a)
+		x.env, err = env.New(config, name, a)
 		if err != nil {
 			return nil, err
 		}
 	}
-	// env manager
-	if err := newManager(environ); err != nil {
+	// env xager
+	if err := newManager(x); err != nil {
 		return nil, err
 	}
 	// env service
-	if environ.args.Service == "" {
+	if x.env.Service == "" {
 		return nil, errors.New(sprintf("%s: service definition is empty", name))
 	}
-	//~ log.Debug("%#v", environ)
-	return environ, nil
+	//~ log.Debug("%#v", x)
+	return x, nil
 }
 
-func newManager(e *Env) error {
-	typ := e.args.Type
+func newManager(x *Ctl) error {
+	typ := x.env.Type
 	if typ == "" {
-		return errors.New(sprintf("%s type definition is empty", e.name))
+		return errors.New(sprintf("%s type definition is empty", x.name))
 	}
-	log.Debug("%s %s manager", e.name, typ)
+	log.Debug("%s %s manager", x.name, typ)
 	var err error
 	if typ == "jail" {
-		e.ctl, err = jail.New(e.args)
+		x.man, err = jail.New(x.env)
 		if err != nil {
 			return err
 		}
 	} else {
-		return errors.New(sprintf("%s: invalid type %s", e.name, typ))
+		return errors.New(sprintf("%s: invalid type %s", x.name, typ))
 	}
 	return nil
 }

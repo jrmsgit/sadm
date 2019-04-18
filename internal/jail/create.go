@@ -29,12 +29,12 @@ func (j *Jail) Create() error {
 	if err := j.checkServiceExec(); err != nil {
 		return err
 	}
-	info, err = pkg.Which(j.args, j.serviceExec)
+	info, err = pkg.Which(j.env, j.serviceExec)
 	if err != nil {
 		return err
 	}
 	log.Debug("which %s: %s", j.serviceExec, info.Pkg)
-	err = pkg.List(j.args, info)
+	err = pkg.List(j.env, info)
 	if err != nil {
 		return err
 	}

@@ -43,6 +43,10 @@ var validCmd = map[string]bool{
 	"fs.ls-mount": true,
 }
 
+var envCmd = map[string]bool{
+	"pkg.list": true,
+}
+
 func usage() {
 	log.Print("usage: sadm-utils command [args...]")
 	log.Print("commands:")
@@ -72,10 +76,27 @@ func main() {
 		usage()
 		os.Exit(2)
 	}
-	dispatch(cmd, cmdargs)
+	if envCmd[cmd] {
+		dispatchEnv(cmd, cmdargs)
+	} else {
+		dispatch(cmd, cmdargs)
+	}
 }
 
 func dispatch(cmd string, cmdargs []string) {
+	log.Debug("dispatch %s %v", cmd, cmdargs)
+	var err error
+	if cmd == "fs.ls-mount" {
+		err = fsLsMount(cmdargs)
+	}
+	if err != nil {
+		log.Error(err)
+		os.Exit(3)
+	}
+	os.Exit(0)
+}
+
+func dispatchEnv(cmd string, cmdargs []string) {
 	log.Debug("dispatch %s %v", cmd, cmdargs)
 	var (
 		err    error
@@ -85,22 +106,20 @@ func dispatch(cmd string, cmdargs []string) {
 	config, err = readConfig()
 	if err != nil {
 		log.Error(err)
-		os.Exit(3)
+		os.Exit(4)
 	}
 	argsinit["service"] = argsService
 	opt, err = env.New(config, "sadm", argsinit)
 	if err != nil {
 		log.Error(err)
-		os.Exit(4)
+		os.Exit(5)
 	}
 	if cmd == "pkg.list" {
 		err = pkgList(opt, cmdargs)
-	} else if cmd == "fs.ls-mount" {
-		err = fsLsMount(cmdargs)
 	}
 	if err != nil {
 		log.Error(err)
-		os.Exit(5)
+		os.Exit(6)
 	}
 	os.Exit(0)
 }

@@ -40,6 +40,7 @@ func init() {
 
 var validCmd = map[string]bool{
 	"pkg.list": true,
+	"fs.ls-mount": true,
 }
 
 func usage() {
@@ -94,6 +95,8 @@ func dispatch(cmd string, cmdargs []string) {
 	}
 	if cmd == "pkg.list" {
 		err = pkgList(opt, cmdargs)
+	} else if cmd == "fs.ls-mount" {
+		err = fsLsMount(cmdargs)
 	}
 	if err != nil {
 		log.Error(err)

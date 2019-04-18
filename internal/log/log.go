@@ -24,7 +24,10 @@ type logger struct {
 var (
 	l        *logger
 	shortIdx int
+	debugEna bool
 )
+
+var lvls string = "warn, error or quiet"
 
 func Init(level string) error {
 	l = new(logger)
@@ -36,7 +39,9 @@ func Init(level string) error {
 	l.Printf = printf
 	l.Print = print
 	if level == "debug" {
-		l.Debug = debug
+		if debugEna {
+			l.Debug = debug
+		}
 		l.Warnf = warnf
 		l.Warn = warn
 	} else if level == "warn" {
@@ -48,6 +53,10 @@ func Init(level string) error {
 	}
 	shortIdx = getShortIdx()
 	return nil
+}
+
+func Levels() string {
+	return lvls
 }
 
 func getShortIdx() int {

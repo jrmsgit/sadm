@@ -158,7 +158,7 @@ func (a *Env) Get(opt string) string {
 
 func (a *Env) GetAll(opt string) map[string]string {
 	d := make(map[string]string)
-	x := opt+"."
+	x := opt + "."
 	for k, v := range a.db {
 		if strings.HasPrefix(k, x) {
 			n := strings.Replace(k, x, "", 1)

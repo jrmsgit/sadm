@@ -6,3 +6,4 @@ var/
 bin/*.bin
 coverage.html
 coverage.out
+internal/log/debug.go

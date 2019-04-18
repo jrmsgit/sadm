@@ -25,6 +25,8 @@ def build_cfg(src_file):
 def install():
 	os.environ['GOBIN'] = '%s/bin' % prefix
 
+	os.system('rm -f ./internal/log/debug.go')
+
 	build_cfg('./internal/cfg/build.go.in')
 	build_cfg('./etc/sadm.json.in')
 

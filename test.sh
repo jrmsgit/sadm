@@ -10,8 +10,9 @@ if test "${1:-'none'}" = '--coverage'; then
   coverage='-coverprofile coverage.out'
 fi
 tpath=${1:-'./...'}
-rm -f internal/cfg/build.go
 export SADM_PREFIX=${PWD}
+rm -f internal/cfg/build.go
+rm -f internal/log/debug.go
 go test $verbose $coverage $tpath
 if test "X${coverage}" != 'X'; then
   go tool cover -html coverage.out -o coverage.html

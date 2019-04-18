@@ -18,6 +18,8 @@ func (j *Jail) Dispatch(action string) error {
 		return j.Create()
 	} else if action == "start" {
 		return j.Start()
+	} else if action == "stop" {
+		return j.Stop()
 	}
 	// fail due to invalid action request
 	err := errors.New(sprintf("invalid jail action %s", action))

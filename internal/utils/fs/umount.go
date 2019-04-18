@@ -8,12 +8,10 @@ import (
 	"github.com/jrmsdev/sadm/internal/utils"
 )
 
-func Mount(args []string) error {
-	log.Debug("%v", args)
-	x := make([]string, 0)
-	x = append(x, "-v")
-	x = append(x, args...)
-	if out, err := utils.Exec("/bin/mount", x...); err != nil {
+func Umount(mnt string) error {
+	log.Debug("%s", mnt)
+	args := []string{"-v", mnt}
+	if out, err := utils.Exec("/bin/umount", args...); err != nil {
 		return err
 	} else {
 		log.Print(out)

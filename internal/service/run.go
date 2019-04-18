@@ -26,6 +26,8 @@ func Run(ctx *env.Env, action string) error {
 	log.Debug("%s exec %s", ctx.Service, cmd)
 	if action == "start" {
 		return start(ctx, cmd)
+	} else if action == "stop" {
+		return stop(ctx, cmd)
 	}
 	msg := sprintf("%s invalid service action %s", ctx.Name, action)
 	log.Debug("%s", msg)

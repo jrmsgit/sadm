@@ -10,7 +10,10 @@ import (
 
 func Mount(args []string) error {
 	log.Debug("%v", args)
-	if _, err := utils.Exec("/bin/mount", args...); err != nil {
+	x := make([]string, 0)
+	x = append(x, "-v")
+	x = append(x, args...)
+	if _, err := utils.Exec("/bin/mount", x...); err != nil {
 		return err
 	}
 	return nil

@@ -26,10 +26,15 @@ func Run(x *Ctl, action string) error {
 			return nil
 		}
 	}
+	if action == "stop" {
+		if err := service.Run(x.env, action); err != nil {
+			return err
+		}
+	}
 	if err := x.man.Dispatch(action); err != nil {
 		return err
 	}
-	if action == "start" || action == "stop" {
+	if action == "start" {
 		if err := service.Run(x.env, action); err != nil {
 			return err
 		}

@@ -5,5 +5,5 @@ package log
 
 func init() {
 	debugEna = true
-	lvls = "debug, "+lvls
+	lvls = "debug, " + lvls
 }

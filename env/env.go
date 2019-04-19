@@ -90,16 +90,22 @@ func (e *Env) setRuntime() {
 }
 
 func (e *Env) loadFile(filename, prefix string) error {
-	if fh, err := os.Open(filename); err != nil {
+	fh, err := os.Open(filename)
+	if err != nil {
+		errOk := false
+		fn := filepath.Base(filename)
+		if fn != "config.json" {
+			errOk = true
+		}
+		if errOk {
+			log.Debug("ignore error: %s", err)
+			return nil
+		}
 		log.Debug("%s", err)
 		return err
-	} else {
-		log.Debug("load %s", filename)
-		if err := e.load(prefix, fh); err != nil {
-			return err
-		}
 	}
-	return nil
+	log.Debug("load %s", filename)
+	return e.load(prefix, fh)
 }
 
 func (e *Env) load(prefix string, fh io.ReadCloser) error {

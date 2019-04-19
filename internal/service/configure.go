@@ -6,13 +6,10 @@ package service
 import (
 	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
-	"github.com/jrmsdev/sadm/internal/utils/pkg"
 )
 
-func check(ctx *env.Env, cmd string) error {
-	log.Debug("%s %s", ctx.Name, cmd)
-	if _, err := pkg.Check(ctx, cmd); err != nil {
-		return err
-	}
+func configure(ctx *env.Env) error {
+	log.Debug("%s", ctx.Name)
+	log.Printf("service %s configured", ctx.Service)
 	return nil
 }

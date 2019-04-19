@@ -9,11 +9,12 @@ import (
 )
 
 var ValidAction = map[string]bool{
-	"dump":   true,
-	"check":  true,
-	"create": true,
-	"start":  true,
-	"stop":   true,
+	"dump":      true,
+	"check":     true,
+	"create":    true,
+	"configure": true,
+	"start":     true,
+	"stop":      true,
 }
 
 var serviceFirst = map[string]bool{

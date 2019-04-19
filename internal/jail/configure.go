@@ -7,11 +7,11 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func (j *Jail) Check() error {
+func (j *Jail) Configure() error {
 	log.Debug("%s", j.env.Name)
 	if err := j.checkDestdir(); err != nil {
 		return err
 	}
-	log.Printf("jail %s dir found", j.destdir)
+	log.Printf("jail %s configured", j.destdir)
 	return nil
 }

@@ -28,6 +28,8 @@ func Run(ctx *env.Env, action string) error {
 		return create(ctx, cmd)
 	} else if action == "check" {
 		return check(ctx, cmd)
+	} else if action == "configure" {
+		return configure(ctx)
 	} else if action == "start" {
 		return start(ctx, cmd)
 	} else if action == "stop" {

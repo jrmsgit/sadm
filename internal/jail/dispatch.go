@@ -16,6 +16,8 @@ func (j *Jail) Dispatch(action string) error {
 		return j.Check()
 	} else if action == "create" {
 		return j.Create()
+	} else if action == "configure" {
+		return j.Configure()
 	} else if action == "start" {
 		return j.Start()
 	} else if action == "stop" {

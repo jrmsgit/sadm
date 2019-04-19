@@ -1,3 +1,5 @@
 {
-  "type": "sadm"
+  "type": "sadm",
+  "nss.passwd": "",
+  "nss.group": ""
 }

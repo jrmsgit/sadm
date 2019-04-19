@@ -186,12 +186,3 @@ func (e *Env) Update(opt, val string) error {
 	e.db[opt] = val
 	return nil
 }
-
-func (e *Env) TplData() map[string]string {
-	return e.db
-}
-
-func (e *Env) TplFile(relname string) string {
-	relname = filepath.Clean(relname)
-	return filepath.Join(e.cfg.CfgDir, "template", relname)
-}

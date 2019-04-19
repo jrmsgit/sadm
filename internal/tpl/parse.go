@@ -8,10 +8,11 @@ import (
 	"io/ioutil"
 	"text/template"
 
+	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func Parse(name, text string, data map[string]string) ([]byte, error) {
+func Parse(name, text string, data *env.TplData) ([]byte, error) {
 	log.Debug("%s", name)
 	t, err := template.New(name).Parse(text)
 	if err != nil {
@@ -27,7 +28,7 @@ func Parse(name, text string, data map[string]string) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func parseFile(filename, name string, data map[string]string) ([]byte, error) {
+func parseFile(filename, name string, data *env.TplData) ([]byte, error) {
 	log.Debug("file %s", filename)
 	blob, err := ioutil.ReadFile(filename)
 	if err != nil {

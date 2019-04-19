@@ -10,9 +10,9 @@ import (
 	"github.com/jrmsdev/sadm/internal/log"
 )
 
-func Parse(text string, data map[string]string) (string, error) {
-	log.Debug("%s", text)
-	t, err := template.New("sadm").Parse(text)
+func Parse(name, text string, data map[string]string) (string, error) {
+	log.Debug("%s", name)
+	t, err := template.New(name).Parse(text)
 	if err != nil {
 		log.Debug("%s", err)
 		return "", err

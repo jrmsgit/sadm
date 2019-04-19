@@ -14,7 +14,7 @@ import (
 func (j *Jail) mount() error {
 	log.Debug("%s %s", j.env.Name, j.destdir)
 	for name, args := range j.env.GetAll("mount") {
-		text, err := tpl.Parse(args, j.env.TplData())
+		text, err := tpl.Parse("jail_mount."+name, args, j.env.TplData())
 		if err != nil {
 			return err
 		}

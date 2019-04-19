@@ -1,4 +1,4 @@
-Port {{.service.sshd.port}}
+Port 3333
 ChallengeResponseAuthentication no
 UsePAM yes
 X11Forwarding no

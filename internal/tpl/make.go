@@ -16,9 +16,10 @@ func Make(ctx *env.Env, prefix string) error {
 	destdir := ctx.Get("destdir")
 	log.Debug("%s env prefix='%s' destdir='%s'", ctx.Name, prefix, destdir)
 	for name, filename := range ctx.GetAll(prefix + ".template") {
-		if err := mktpl(ctx, destdir, prefix + "." + name, filename); err != nil {
+		if err := mktpl(ctx, destdir, prefix+"."+name, filename); err != nil {
 			return err
 		}
+		log.Printf("%s template %s created", prefix, name)
 	}
 	return nil
 }
@@ -31,8 +32,8 @@ func mkdst(fn string) error {
 func mktpl(ctx *env.Env, destdir, name, filename string) error {
 	fn := ctx.TplFile(filename)
 	dst := filepath.Join(destdir, filename)
-	log.Debug("tpl %s", fn)
-	log.Debug("dst %s", dst)
+	//~ log.Debug("tpl %s", fn)
+	//~ log.Debug("dst %s", dst)
 	if err := mkdst(dst); err != nil {
 		return err
 	}

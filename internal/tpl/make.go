@@ -8,13 +8,13 @@ import (
 
 	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/internal/utils/fs"
 )
 
 func Make(ctx *env.Env, prefix string) error {
 	destdir := ctx.Get("destdir")
 	log.Debug("%s env prefix='%s' destdir='%s'", ctx.Name, prefix, destdir)
 	for name, filename := range ctx.GetAll(prefix + ".template") {
-		log.Print(name, filename)
 		if err := mktpl(ctx, destdir, name, filename); err != nil {
 			return err
 		}
@@ -34,5 +34,6 @@ func mktpl(ctx *env.Env, destdir, name, filename string) error {
 }
 
 func mkdst(fn string) error {
-	return nil
+	dst := filepath.Dir(fn)
+	return fs.Mkdir(dst)
 }

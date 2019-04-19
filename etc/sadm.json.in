@@ -1,4 +1,4 @@
 {
   "LibDir": "[[PREFIX]]/lib/sadm",
-  "CfgDir": "[[PREFIX]]/etc/sadm"
+  "CfgDir": "[[PREFIX]]/share/doc/sadm/examples"
 }

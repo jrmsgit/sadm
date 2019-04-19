@@ -58,6 +58,7 @@ func main() {
 		usage()
 		os.Exit(9)
 	}
+	cmdargs := flag.Args()[2:]
 	// read config file
 	if fh, err := os.Open(cfgfile); err != nil {
 		log.Error(err)
@@ -82,7 +83,7 @@ func main() {
 					os.Exit(3)
 				} else {
 					// run env action
-					if err := ctl.Run(man, action); err != nil {
+					if err := ctl.Run(man, action, cmdargs); err != nil {
 						log.Error(err)
 						os.Exit(4)
 					}

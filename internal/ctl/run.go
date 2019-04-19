@@ -21,13 +21,15 @@ var serviceFirst = map[string]bool{
 	"stop": true,
 }
 
-func Run(x *Ctl, action string) error {
+func Run(x *Ctl, action string, cmdargs []string) error {
 	log.Debug("%s %s %s", action, x.env.Type, x.name)
 	if action == "dump" {
-		if s, err := x.env.Dump(); err != nil {
+		if s, err := x.env.Dump(cmdargs); err != nil {
 			return err
 		} else {
-			log.Print(s)
+			if len(s) > 0 {
+				log.Print(s)
+			}
 			return nil
 		}
 	}

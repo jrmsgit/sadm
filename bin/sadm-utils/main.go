@@ -40,11 +40,13 @@ func init() {
 
 var validCmd = map[string]bool{
 	"pkg.list":    true,
+	"nss.sync": true,
 	"fs.ls-mount": true,
 }
 
 var envCmd = map[string]bool{
 	"pkg.list": true,
+	"nss.sync": true,
 }
 
 func usage() {
@@ -101,7 +103,7 @@ func dispatchEnv(cmd string, cmdargs []string) {
 	var (
 		err    error
 		config *cfg.Cfg
-		opt    *env.Env
+		ctx    *env.Env
 	)
 	config, err = readConfig()
 	if err != nil {
@@ -109,13 +111,15 @@ func dispatchEnv(cmd string, cmdargs []string) {
 		os.Exit(4)
 	}
 	argsinit["service"] = argsService
-	opt, err = env.New(config, "sadm", argsinit)
+	ctx, err = env.New(config, "sadm-utils", argsinit)
 	if err != nil {
 		log.Error(err)
 		os.Exit(5)
 	}
 	if cmd == "pkg.list" {
-		err = pkgList(opt, cmdargs)
+		err = pkgList(ctx, cmdargs)
+	} else if cmd == "nss.sync" {
+		err = nssSync(ctx, cmdargs)
 	}
 	if err != nil {
 		log.Error(err)

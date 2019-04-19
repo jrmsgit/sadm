@@ -46,5 +46,6 @@ func mktpl(ctx *env.Env, destdir, name, filename string) error {
 		log.Debug("%s", err)
 		return err
 	}
+	log.Debug("%s done", dst)
 	return nil
 }

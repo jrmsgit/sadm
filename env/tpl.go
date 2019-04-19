@@ -6,8 +6,6 @@ package env
 import (
 	"path/filepath"
 	"strings"
-
-	//~ "github.com/jrmsdev/sadm/internal/log"
 )
 
 func (e *Env) TplFile(relname string) string {

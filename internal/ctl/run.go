@@ -16,6 +16,10 @@ var ValidAction = map[string]bool{
 	"stop":   true,
 }
 
+var serviceFirst = map[string]bool{
+	"stop": true,
+}
+
 func Run(x *Ctl, action string) error {
 	log.Debug("%s %s %s", action, x.env.Type, x.name)
 	if action == "dump" {
@@ -26,7 +30,7 @@ func Run(x *Ctl, action string) error {
 			return nil
 		}
 	}
-	if action == "stop" {
+	if serviceFirst[action] {
 		if err := service.Run(x.env, action); err != nil {
 			return err
 		}
@@ -34,7 +38,7 @@ func Run(x *Ctl, action string) error {
 	if err := x.man.Dispatch(action); err != nil {
 		return err
 	}
-	if action == "start" {
+	if !serviceFirst[action] {
 		if err := service.Run(x.env, action); err != nil {
 			return err
 		}

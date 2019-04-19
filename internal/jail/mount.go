@@ -14,12 +14,13 @@ import (
 func (j *Jail) mount() error {
 	log.Debug("%s %s", j.env.Name, j.destdir)
 	for name, args := range j.env.GetAll("mount") {
-		text, err := tpl.Parse("jail_mount."+name, args, j.env.TplData())
+		blob, err := tpl.Parse("jail_mount."+name, args, j.env.TplData())
 		if err != nil {
 			return err
 		}
+		text := string(blob)
 		log.Debug("%s mount %s", name, text)
-		err = fs.Mount(strings.Split(text, " "))
+		err = fs.Mount(strings.Split(text, " ")...)
 		if err != nil {
 			return err
 		}

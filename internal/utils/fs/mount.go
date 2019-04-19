@@ -10,7 +10,7 @@ import (
 	"github.com/jrmsdev/sadm/internal/utils"
 )
 
-func Mount(args []string) error {
+func Mount(args ...string) error {
 	log.Debug("%v", args)
 	x := make([]string, 0)
 	x = append(x, "-v")

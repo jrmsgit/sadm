@@ -26,28 +26,38 @@ func Sync(ctx *env.Env) error {
 	if err := fs.Mkdir(destdir); err != nil {
 		return err
 	}
+	dbs := make(map[string]map[string]bool)
 	for _, p := range syncPrefix {
 		for db, val := range ctx.GetAll(p) {
 			val = strings.TrimSpace(val)
 			if val == "" {
 				continue
 			}
-			keys := make(map[string]bool)
-			dst := filepath.Join(destdir, db)
+			_, ok := dbs[db]
+			if !ok {
+				dbs[db] = make(map[string]bool)
+			}
 			for _, k := range strings.Split(val, " ") {
 				k = strings.TrimSpace(k)
 				if k != "" {
-					keys[k] = true
+					dbs[db][k] = true
 				}
 			}
-			l := make([]string, 0)
-			for k := range keys {
-				l = append(l, k)
-			}
-			sort.Strings(l)
-			llen := len(l)
-			if llen > 0 {
-				syncDB(dst, db, l)
+		}
+	}
+	for db := range dbs {
+		l := make([]string, 0)
+		for k := range dbs[db] {
+			l = append(l, k)
+		}
+		sort.Strings(l)
+		llen := len(l)
+		if llen > 0 {
+			dst := filepath.Join(destdir, db)
+			if err := syncDB(dst, db, l); err != nil {
+				return err
+			} else {
+				log.Printf("nss %s sync done", db)
 			}
 		}
 	}

@@ -21,8 +21,8 @@ func List(opt *env.Env, info *Info) error {
 		return err
 	}
 	// list deps
-	pkgDeps := strings.Split(strings.TrimSpace(opt.Get("service.pkg.deps")), " ")
-	//~ log.Debug("pkg.deps %s: %v", info.Pkg, pkgDeps)
+	pkgDeps := strings.Split(strings.TrimSpace(opt.Get("service.pkg.add")), " ")
+	//~ log.Debug("pkg.add %s: %v", info.Pkg, pkgDeps)
 	err = getDeps(m, info, info.Pkg, pkgDeps...)
 	if err != nil {
 		return err

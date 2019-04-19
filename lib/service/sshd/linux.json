@@ -1,4 +1,8 @@
 {
   "pkg.add": "liblzma5 liblz4-1 libgcrypt20",
-  "nss.passwd": "sshd"
+  "nss.passwd": "sshd",
+  "configure.sshd_ed25519_key": "/usr/bin/ssh-keygen -q -f %s/etc/ssh/ssh_host_ed25519_key -N '' -t ed25519",
+  "configure.sshd_ecdsa_key": "/usr/bin/ssh-keygen -q -f %s/etc/ssh/ssh_host_ecdsa_key -N '' -t ecdsa",
+  "configure.sshd_dsa_key": "/usr/bin/ssh-keygen -q -f %s/etc/ssh/ssh_host_dsa_key -N '' -t dsa",
+  "configure.sshd_rsa_key": "/usr/bin/ssh-keygen -q -f %s/etc/ssh/ssh_host_rsa_key -N '' -t rsa"
 }

@@ -31,6 +31,6 @@ func create(ctx *env.Env, cmd string) error {
 	if err != nil {
 		return err
 	}
-	log.Printf("%s created %s", ctx.Name, cmd)
+	log.Printf("created %s service: %s", ctx.Name, cmd)
 	return nil
 }

@@ -16,8 +16,8 @@ import (
 var sprintf = fmt.Sprintf
 
 type Jail struct {
-	env         *env.Env
-	destdir     string
+	env     *env.Env
+	destdir string
 }
 
 func New(opt *env.Env) (*Jail, error) {

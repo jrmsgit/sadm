@@ -12,5 +12,6 @@ func (j *Jail) Check() error {
 	if err := j.checkDestdir(); err != nil {
 		return err
 	}
+	log.Printf("jail %s dir found", j.destdir)
 	return nil
 }

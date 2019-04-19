@@ -72,12 +72,3 @@ func (j *Jail) checkDestdir() error {
 	}
 	return nil
 }
-
-func (j *Jail) checkServiceExec() error {
-	if j.serviceExec == "" {
-		err := errors.New(sprintf("%s service exec is empty", j.env.Service))
-		log.Debug("%s", err)
-		return err
-	}
-	return nil
-}

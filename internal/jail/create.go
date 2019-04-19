@@ -8,7 +8,6 @@ import (
 
 	"github.com/jrmsdev/sadm/internal/log"
 	"github.com/jrmsdev/sadm/internal/utils/fs"
-	"github.com/jrmsdev/sadm/internal/utils/pkg"
 )
 
 func (j *Jail) Create() error {
@@ -19,28 +18,6 @@ func (j *Jail) Create() error {
 		return err
 	}
 	if err := fs.Mkdir(j.destdir); err != nil {
-		return err
-	}
-	// service pkg
-	var (
-		info *pkg.Info
-		err  error
-	)
-	if err := j.checkServiceExec(); err != nil {
-		return err
-	}
-	info, err = pkg.Which(j.env, j.serviceExec)
-	if err != nil {
-		return err
-	}
-	log.Debug("which %s: %s", j.serviceExec, info.Pkg)
-	err = pkg.List(j.env, info)
-	if err != nil {
-		return err
-	}
-	// sync jail files
-	err = fs.Sync(j.destdir, info.Files...)
-	if err != nil {
 		return err
 	}
 	return nil

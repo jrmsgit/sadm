@@ -24,7 +24,9 @@ func Run(ctx *env.Env, action string) error {
 		return errors.New(sprintf("%s service exec is empty", ctx.Service))
 	}
 	log.Debug("%s exec %s", ctx.Service, cmd)
-	if action == "start" {
+	if action == "create" {
+		return create(ctx, cmd)
+	} else if action == "start" {
 		return start(ctx, cmd)
 	} else if action == "stop" {
 		return stop(ctx, cmd)

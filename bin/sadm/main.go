@@ -75,14 +75,14 @@ func main() {
 				log.Error(err)
 				os.Exit(5)
 			} else {
-				// create env
+				// create env manager
 				defer envfh.Close()
-				if env, err := ctl.New(config, envname, envfh); err != nil {
+				if man, err := ctl.New(config, envname, envfh); err != nil {
 					log.Error(err)
 					os.Exit(3)
 				} else {
 					// run env action
-					if err := ctl.Run(env, action); err != nil {
+					if err := ctl.Run(man, action); err != nil {
 						log.Error(err)
 						os.Exit(4)
 					}

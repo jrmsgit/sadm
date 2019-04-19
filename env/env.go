@@ -53,7 +53,7 @@ func New(config *cfg.Cfg, name string, src map[string]string) (*Env, error) {
 
 func (a *Env) source(src map[string]string) {
 	for k, v := range src {
-		a.db[k] = v
+		a.Update(k, v)
 	}
 }
 

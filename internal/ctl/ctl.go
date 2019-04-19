@@ -39,12 +39,13 @@ func New(config *cfg.Cfg, name string, src io.ReadCloser) (*Ctl, error) {
 		if err := json.Unmarshal(blob, &a); err != nil {
 			return nil, err
 		}
+		// new env
 		x.env, err = env.New(config, name, a)
 		if err != nil {
 			return nil, err
 		}
 	}
-	// env xager
+	// env manager
 	if err := newManager(x); err != nil {
 		return nil, err
 	}

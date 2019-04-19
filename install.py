@@ -38,6 +38,7 @@ def install():
 
 	os.system('mkdir -vp %s/share/doc/sadm/examples' % prefix)
 	os.system('cp -va etc/sadm/*.json %s/share/doc/sadm/examples' % prefix)
+	os.system('cp -va etc/sadm/template %s/share/doc/sadm/examples' % prefix)
 
 	os.system('mkdir -vp %s/lib/sadm' % prefix)
 	os.system('cp -va lib/* %s/lib/sadm' % prefix)

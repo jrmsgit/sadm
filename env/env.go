@@ -76,14 +76,8 @@ func (e *Env) init() error {
 		filepath.Join(e.cfg.LibDir, "env", e.Type, e.OS+".json"),
 	}
 	for _, fn := range files {
-		if fh, err := os.Open(fn); err != nil {
-			log.Debug("%s", err)
+		if err := e.loadFile(fn, ""); err != nil {
 			return err
-		} else {
-			log.Debug("load %s", fn)
-			if err := e.load("", fh); err != nil {
-				return err
-			}
 		}
 	}
 	return nil
@@ -93,6 +87,19 @@ func (e *Env) setRuntime() {
 	e.OS = runtime.GOOS
 	e.db["os"] = e.OS
 	e.db["arch"] = runtime.GOARCH
+}
+
+func (e *Env) loadFile(filename, prefix string) error {
+	if fh, err := os.Open(filename); err != nil {
+		log.Debug("%s", err)
+		return err
+	} else {
+		log.Debug("load %s", filename)
+		if err := e.load(prefix, fh); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func (e *Env) load(prefix string, fh io.ReadCloser) error {
@@ -127,14 +134,8 @@ func (e *Env) loadOS() error {
 		filepath.Join(e.cfg.LibDir, "os", e.OS+".json"),
 	}
 	for _, fn := range files {
-		if fh, err := os.Open(fn); err != nil {
-			log.Debug("%s", err)
+		if err := e.loadFile(fn, "os"); err != nil {
 			return err
-		} else {
-			log.Debug("load %s", fn)
-			if err := e.load("os", fh); err != nil {
-				return err
-			}
 		}
 	}
 	return nil
@@ -147,14 +148,8 @@ func (e *Env) loadService() error {
 		filepath.Join(e.cfg.LibDir, "service", e.Service, e.OS+".json"),
 	}
 	for _, fn := range files {
-		if fh, err := os.Open(fn); err != nil {
-			log.Debug("%s", err)
+		if err := e.loadFile(fn, "service"); err != nil {
 			return err
-		} else {
-			log.Debug("load %s", fn)
-			if err := e.load("service", fh); err != nil {
-				return err
-			}
 		}
 	}
 	return nil

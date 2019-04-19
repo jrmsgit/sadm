@@ -4,7 +4,6 @@
 package fs
 
 import (
-	"path/filepath"
 	"strings"
 
 	"github.com/jrmsdev/sadm/internal/log"
@@ -14,18 +13,12 @@ import (
 func LsMount(basedir string) ([]string, error) {
 	log.Debug("%s", basedir)
 	l := make([]string, 0)
-	d, err := filepath.Abs(basedir)
-	if err != nil {
-		log.Debug("%s", err)
-		return l, err
-	}
-	log.Debug("abs: %s", d)
 	if out, err := utils.Exec("/bin/mount", "-l"); err != nil {
 		return l, err
 	} else {
 		for _, line := range strings.Split(strings.TrimSpace(string(out)), "\n") {
 			mnt := strings.Split(line, " ")[2]
-			if strings.HasPrefix(mnt, d) {
+			if strings.HasPrefix(mnt, basedir) {
 				l = append(l, mnt)
 			}
 		}

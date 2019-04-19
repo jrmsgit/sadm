@@ -176,3 +176,7 @@ func (a *Env) Update(opt, val string) error {
 	a.db[opt] = val
 	return nil
 }
+
+func (a *Env) TplData() map[string]string {
+	return a.db
+}

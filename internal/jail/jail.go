@@ -37,9 +37,16 @@ func New(opt *env.Env) (*Jail, error) {
 
 func (j *Jail) setDefaults() error {
 	log.Debug("set defaults %s", j.env.Name)
+	var err error
+	// destdir
 	destdir := filepath.FromSlash(j.env.Get("destdir"))
 	if destdir == "" {
 		return errors.New("jail destdir is not set")
+	}
+	destdir, err = filepath.Abs(destdir)
+	if err != nil {
+		log.Debug("%s", err)
+		return err
 	}
 	if err := j.env.Update("destdir", filepath.Join(destdir, j.env.Name)); err != nil {
 		return err
@@ -49,7 +56,7 @@ func (j *Jail) setDefaults() error {
 
 func (j *Jail) load() error {
 	// load destdir
-	j.destdir = filepath.Clean(j.env.Get("destdir"))
+	j.destdir = j.env.Get("destdir")
 	log.Debug("destdir %s", j.destdir)
 	// load service exec
 	j.serviceExec = strings.TrimSpace(j.env.Get("service.exec"))

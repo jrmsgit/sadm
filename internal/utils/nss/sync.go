@@ -4,12 +4,14 @@
 package nss
 
 import (
+	"io/ioutil"
 	"path/filepath"
 	"sort"
 	"strings"
 
 	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/internal/utils"
 	"github.com/jrmsdev/sadm/internal/utils/fs"
 )
 
@@ -39,7 +41,7 @@ func Sync(ctx *env.Env) error {
 				}
 			}
 			l := make([]string, 0)
-			for k, _ := range keys {
+			for k := range keys {
 				l = append(l, k)
 			}
 			sort.Strings(l)
@@ -54,5 +56,16 @@ func Sync(ctx *env.Env) error {
 
 func syncDB(dst, db string, keys []string) error {
 	log.Debug("sync db %s %v %s", db, keys, dst)
+	args := make([]string, 0)
+	args = append(args, db)
+	args = append(args, keys...)
+	out, err := utils.Exec("/usr/bin/getent", args...)
+	if err != nil {
+		return err
+	}
+	if err := ioutil.WriteFile(dst, out, 0644); err != nil {
+		log.Debug("%s", err)
+		return err
+	}
 	return nil
 }

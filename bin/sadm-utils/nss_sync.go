@@ -31,7 +31,7 @@ func nssSync(ctx *env.Env, cmdargs []string) error {
 			v = v + k + " "
 		}
 	}
-	if err := ctx.Update("nss." + db, strings.TrimSpace(v)); err != nil {
+	if err := ctx.Update("nss."+db, strings.TrimSpace(v)); err != nil {
 		return err
 	}
 	return nss.Sync(ctx)

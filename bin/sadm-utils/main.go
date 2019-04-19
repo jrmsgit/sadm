@@ -40,7 +40,7 @@ func init() {
 
 var validCmd = map[string]bool{
 	"pkg.list":    true,
-	"nss.sync": true,
+	"nss.sync":    true,
 	"fs.ls-mount": true,
 }
 

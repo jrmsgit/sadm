@@ -5,8 +5,6 @@ package env
 
 import (
 	"encoding/json"
-	"fmt"
-	"sort"
 	"strings"
 
 	"github.com/jrmsdev/sadm/internal/log"
@@ -15,26 +13,23 @@ import (
 func (e *Env) Dump(args []string) (string, error) {
 	log.Debug("dump %v", args)
 	largs := len(args)
+	var report map[string]string
 	if largs > 0 {
-		report := make([]string, 0)
+		report = make(map[string]string)
 		for _, p := range args {
-			for k := range e.db {
+			for k, v := range e.db {
 				if strings.HasPrefix(k, p) {
-					report = append(report, k)
+					report[k] = v
 				}
 			}
 		}
-		sort.Strings(report)
-		s := ""
-		for _, k := range report {
-			s = fmt.Sprintf("%s%s: %s\n", s, k, e.db[k])
-		}
-		return strings.TrimSpace(s), nil
+	}
+	if report == nil {
+		report = e.db
+	}
+	if blob, err := json.MarshalIndent(report, "", "  "); err != nil {
+		return "{}", err
 	} else {
-		if blob, err := json.MarshalIndent(e.db, "", "  "); err != nil {
-			return "{}", err
-		} else {
-			return string(blob), nil
-		}
+		return string(blob), nil
 	}
 }

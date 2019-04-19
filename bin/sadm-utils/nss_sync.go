@@ -24,13 +24,15 @@ func nssSync(ctx *env.Env, cmdargs []string) error {
 		return err
 	}
 	ctx.Update("destdir", destdir)
-	db := cmdargs[1]
+	db := strings.TrimSpace(cmdargs[1])
 	v := ""
 	for _, k := range cmdargs[2:] {
-		v = v + k + " "
+		if k != "" {
+			v = v + k + " "
+		}
 	}
 	if err := ctx.Update("nss." + db, strings.TrimSpace(v)); err != nil {
 		return err
 	}
-	return nss.Sync(ctx, "")
+	return nss.Sync(ctx)
 }

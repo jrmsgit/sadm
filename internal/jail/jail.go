@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
-	"strings"
 
 	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
@@ -19,7 +18,6 @@ var sprintf = fmt.Sprintf
 type Jail struct {
 	env         *env.Env
 	destdir     string
-	serviceExec string
 }
 
 func New(opt *env.Env) (*Jail, error) {
@@ -55,12 +53,9 @@ func (j *Jail) setDefaults() error {
 }
 
 func (j *Jail) load() error {
-	// load destdir
+	// destdir
 	j.destdir = j.env.Get("destdir")
 	log.Debug("destdir %s", j.destdir)
-	// load service exec
-	j.serviceExec = strings.TrimSpace(j.env.Get("service.exec"))
-	log.Debug("%s exec %s", j.env.Service, j.serviceExec)
 	return nil
 }
 

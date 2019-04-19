@@ -1,5 +1,7 @@
 {
   "mount.dev": "-t devtmpfs udev %s/dev",
   "mount.proc": "-t proc proc %s/proc",
-  "mount.sys": "-t sysfs sysfs %s/sys"
+  "mount.sys": "-t sysfs sysfs %s/sys",
+  "nss.passwd": "root nobody",
+  "nss.group": "root nogroup"
 }

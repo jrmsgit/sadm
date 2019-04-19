@@ -5,6 +5,8 @@ package main
 
 import (
 	"errors"
+	"path/filepath"
+	"strings"
 
 	"github.com/jrmsdev/sadm/env"
 	"github.com/jrmsdev/sadm/internal/log"
@@ -12,12 +14,23 @@ import (
 )
 
 func nssSync(ctx *env.Env, cmdargs []string) error {
-	log.Debug("%v", cmdargs)
-	if len(cmdargs) < 2 {
+	log.Debug("(%d) %v", len(cmdargs), cmdargs)
+	if len(cmdargs) < 3 {
 		return errors.New("invalid args")
 	}
-	destdir := cmdargs[0]
+	destdir, err := filepath.Abs(cmdargs[0])
+	if err != nil {
+		log.Debug("%s", err)
+		return err
+	}
 	ctx.Update("destdir", destdir)
 	db := cmdargs[1]
-	return nss.Sync(ctx, db)
+	v := ""
+	for _, k := range cmdargs[2:] {
+		v = v + k + " "
+	}
+	if err := ctx.Update("nss." + db, strings.TrimSpace(v)); err != nil {
+		return err
+	}
+	return nss.Sync(ctx, "")
 }

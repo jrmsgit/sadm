@@ -1,3 +1,4 @@
 {
-  "pkg.add": "liblzma5 liblz4-1 libgcrypt20"
+  "pkg.add": "liblzma5 liblz4-1 libgcrypt20",
+  "nss.passwd": "sshd"
 }

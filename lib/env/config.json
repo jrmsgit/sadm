@@ -1,5 +1,6 @@
 {
   "type": "env",
   "destdir": "",
-  "service": ""
+  "service": "",
+  "nss.passwd": ""
 }

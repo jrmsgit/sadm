@@ -1,5 +1,6 @@
 {
   "type": "jail",
+  "destdir": "./var",
   "service": "sshd",
-  "destdir": "./var"
+  "service.sshd.port": "28128"
 }

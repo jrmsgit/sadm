@@ -1,4 +1,5 @@
 {
   "type": "env",
-  "destdir": ""
+  "destdir": "",
+  "service": ""
 }

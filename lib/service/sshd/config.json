@@ -1,3 +1,5 @@
 {
-  "exec": "/usr/sbin/sshd"
+  "exec": "/usr/sbin/sshd",
+  "sshd.port": "22",
+  "template.sshd_config": "/etc/ssh/sshd_config"
 }

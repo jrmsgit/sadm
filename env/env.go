@@ -28,44 +28,52 @@ type Env struct {
 
 func New(config *cfg.Cfg, name string, src map[string]string) (*Env, error) {
 	log.Debug("new %s", name)
-	a := new(Env)
-	a.cfg = config
-	a.db = make(map[string]string)
-	a.Name = name
-	a.setRuntime()
-	a.Type = strings.TrimSpace(src["type"])
-	if err := a.init(); err != nil {
+	e := new(Env)
+	e.cfg = config
+	e.db = make(map[string]string)
+	e.Name = name
+	e.setRuntime()
+	e.Type = strings.TrimSpace(src["type"])
+	if err := e.init(); err != nil {
 		return nil, err
 	}
-	if err := a.loadOS(); err != nil {
+	if err := e.loadOS(); err != nil {
 		return nil, err
 	}
-	a.Service = strings.TrimSpace(src["service"])
-	if a.Service != "" {
-		if err := a.loadService(); err != nil {
+	e.Service = strings.TrimSpace(src["service"])
+	if e.Service != "" {
+		if err := e.loadService(); err != nil {
 			return nil, err
 		}
 	}
-	a.source(src)
-	//~ log.Debug("new %#v", a)
-	return a, nil
-}
-
-func (a *Env) source(src map[string]string) {
-	for k, v := range src {
-		a.Update(k, v)
+	if err := e.source(src); err != nil {
+		return nil, err
 	}
+	//~ log.Debug("new %#v", a)
+	return e, nil
 }
 
-func (a *Env) init() error {
-	if a.Type == "" {
+func (e *Env) source(src map[string]string) error {
+	log.Debug("source config")
+	var err error
+	for k, v := range src {
+		err = e.Update(k, v)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (e *Env) init() error {
+	if e.Type == "" {
 		return errors.New("env type is empty")
 	}
-	log.Debug("init %s", a.Type)
+	log.Debug("init %s", e.Type)
 	files := []string{
-		filepath.Join(a.cfg.LibDir, "env", "config.json"),
-		filepath.Join(a.cfg.LibDir, "env", a.Type, "config.json"),
-		filepath.Join(a.cfg.LibDir, "env", a.Type, a.OS+".json"),
+		filepath.Join(e.cfg.LibDir, "env", "config.json"),
+		filepath.Join(e.cfg.LibDir, "env", e.Type, "config.json"),
+		filepath.Join(e.cfg.LibDir, "env", e.Type, e.OS+".json"),
 	}
 	for _, fn := range files {
 		if fh, err := os.Open(fn); err != nil {
@@ -73,7 +81,7 @@ func (a *Env) init() error {
 			return err
 		} else {
 			log.Debug("load %s", fn)
-			if err := a.load("", fh); err != nil {
+			if err := e.load("", fh); err != nil {
 				return err
 			}
 		}
@@ -81,13 +89,13 @@ func (a *Env) init() error {
 	return nil
 }
 
-func (a *Env) setRuntime() {
-	a.OS = runtime.GOOS
-	a.db["os"] = a.OS
-	a.db["arch"] = runtime.GOARCH
+func (e *Env) setRuntime() {
+	e.OS = runtime.GOOS
+	e.db["os"] = e.OS
+	e.db["arch"] = runtime.GOARCH
 }
 
-func (a *Env) load(prefix string, fh io.ReadCloser) error {
+func (e *Env) load(prefix string, fh io.ReadCloser) error {
 	defer fh.Close()
 	src := make(map[string]string)
 	if blob, err := ioutil.ReadAll(fh); err != nil {
@@ -102,21 +110,21 @@ func (a *Env) load(prefix string, fh io.ReadCloser) error {
 				prefix = prefix + "."
 			}
 			for opt, val := range src {
-				a.db[prefix+opt] = val
+				e.db[prefix+opt] = val
 			}
-			//~ log.Debug("%s loaded %#v", prefix, a.db)
+			//~ log.Debug("%s loaded %#v", prefix, e.db)
 		}
 	}
 	return nil
 }
 
-func (a *Env) loadOS() error {
-	if a.OS == "" {
+func (e *Env) loadOS() error {
+	if e.OS == "" {
 		return errors.New("runtime OS is empty!?? =(")
 	}
 	files := []string{
-		filepath.Join(a.cfg.LibDir, "os", "config.json"),
-		filepath.Join(a.cfg.LibDir, "os", a.OS+".json"),
+		filepath.Join(e.cfg.LibDir, "os", "config.json"),
+		filepath.Join(e.cfg.LibDir, "os", e.OS+".json"),
 	}
 	for _, fn := range files {
 		if fh, err := os.Open(fn); err != nil {
@@ -124,7 +132,7 @@ func (a *Env) loadOS() error {
 			return err
 		} else {
 			log.Debug("load %s", fn)
-			if err := a.load("os", fh); err != nil {
+			if err := e.load("os", fh); err != nil {
 				return err
 			}
 		}
@@ -132,11 +140,11 @@ func (a *Env) loadOS() error {
 	return nil
 }
 
-func (a *Env) loadService() error {
+func (e *Env) loadService() error {
 	files := []string{
-		filepath.Join(a.cfg.LibDir, "service", "config.json"),
-		filepath.Join(a.cfg.LibDir, "service", a.Service, "config.json"),
-		filepath.Join(a.cfg.LibDir, "service", a.Service, a.OS+".json"),
+		filepath.Join(e.cfg.LibDir, "service", "config.json"),
+		filepath.Join(e.cfg.LibDir, "service", e.Service, "config.json"),
+		filepath.Join(e.cfg.LibDir, "service", e.Service, e.OS+".json"),
 	}
 	for _, fn := range files {
 		if fh, err := os.Open(fn); err != nil {
@@ -144,7 +152,7 @@ func (a *Env) loadService() error {
 			return err
 		} else {
 			log.Debug("load %s", fn)
-			if err := a.load("service", fh); err != nil {
+			if err := e.load("service", fh); err != nil {
 				return err
 			}
 		}
@@ -152,14 +160,14 @@ func (a *Env) loadService() error {
 	return nil
 }
 
-func (a *Env) Get(opt string) string {
-	return strings.TrimSpace(a.db[opt])
+func (e *Env) Get(opt string) string {
+	return strings.TrimSpace(e.db[opt])
 }
 
-func (a *Env) GetAll(opt string) map[string]string {
+func (e *Env) GetAll(opt string) map[string]string {
 	d := make(map[string]string)
 	x := opt + "."
-	for k, v := range a.db {
+	for k, v := range e.db {
 		if strings.HasPrefix(k, x) {
 			n := strings.Replace(k, x, "", 1)
 			d[n] = strings.TrimSpace(v)
@@ -168,15 +176,22 @@ func (a *Env) GetAll(opt string) map[string]string {
 	return d
 }
 
-func (a *Env) Update(opt, val string) error {
-	_, ok := a.db[opt]
+func (e *Env) Update(opt, val string) error {
+	_, ok := e.db[opt]
 	if !ok {
-		return errors.New("invalid option " + opt)
+		err := errors.New("invalid option " + opt)
+		log.Debug("%s", err)
+		return err
 	}
-	a.db[opt] = val
+	e.db[opt] = val
 	return nil
 }
 
-func (a *Env) TplData() map[string]string {
-	return a.db
+func (e *Env) TplData() map[string]string {
+	return e.db
+}
+
+func (e *Env) TplFile(relname string) string {
+	relname = filepath.Clean(relname)
+	return filepath.Join(e.cfg.CfgDir, "template", relname)
 }

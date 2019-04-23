@@ -8,13 +8,13 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"runtime"
 	"strings"
 
 	"github.com/jrmsdev/sadm/internal/cfg"
 	"github.com/jrmsdev/sadm/internal/log"
+	"github.com/jrmsdev/sadm/lib"
 )
 
 type Env struct {
@@ -69,11 +69,14 @@ func (e *Env) init() error {
 	if e.Type == "" {
 		return errors.New("env type is empty")
 	}
+	if err := lib.Init(); err != nil {
+		return err
+	}
 	log.Debug("init %s", e.Type)
 	files := []string{
-		filepath.Join(e.cfg.LibDir, "env", "config.json"),
-		filepath.Join(e.cfg.LibDir, "env", e.Type, "config.json"),
-		filepath.Join(e.cfg.LibDir, "env", e.Type, e.OS+".json"),
+		filepath.Join("env", "config.json"),
+		filepath.Join("env", e.Type, "config.json"),
+		filepath.Join("env", e.Type, e.OS+".json"),
 	}
 	for _, fn := range files {
 		if err := e.loadFile(fn, ""); err != nil {
@@ -90,7 +93,7 @@ func (e *Env) setRuntime() {
 }
 
 func (e *Env) loadFile(filename, prefix string) error {
-	fh, err := os.Open(filename)
+	fh, err := lib.Open(filename)
 	if err != nil {
 		errOk := false
 		fn := filepath.Base(filename)
@@ -136,8 +139,8 @@ func (e *Env) loadOS() error {
 		return errors.New("runtime OS is empty!?? =(")
 	}
 	files := []string{
-		filepath.Join(e.cfg.LibDir, "os", "config.json"),
-		filepath.Join(e.cfg.LibDir, "os", e.OS+".json"),
+		filepath.Join("os", "config.json"),
+		filepath.Join("os", e.OS+".json"),
 	}
 	for _, fn := range files {
 		if err := e.loadFile(fn, "os"); err != nil {
@@ -149,9 +152,9 @@ func (e *Env) loadOS() error {
 
 func (e *Env) loadService() error {
 	files := []string{
-		filepath.Join(e.cfg.LibDir, "service", "config.json"),
-		filepath.Join(e.cfg.LibDir, "service", e.Service, "config.json"),
-		filepath.Join(e.cfg.LibDir, "service", e.Service, e.OS+".json"),
+		filepath.Join("service", "config.json"),
+		filepath.Join("service", e.Service, "config.json"),
+		filepath.Join("service", e.Service, e.OS+".json"),
 	}
 	for _, fn := range files {
 		if err := e.loadFile(fn, "service"); err != nil {

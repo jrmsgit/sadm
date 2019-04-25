@@ -17,7 +17,7 @@ import (
 
 var z *zip.Writer
 var zbuf *bytes.Buffer
-var loaded map[string]bool
+var loaded []string
 
 var b64 = base64.StdEncoding.EncodeToString
 var sprintf = fmt.Sprintf
@@ -35,12 +35,19 @@ func main() {
 	check(err)
 	files = append(files, l...)
 
-	loaded = make(map[string]bool)
+	sort.Strings(files)
+
+	loaded = make([]string, 0)
 	zbuf = new(bytes.Buffer)
 	z = zip.NewWriter(zbuf)
 
+	uniq := make(map[string]bool)
 	for _, fn := range files {
-		check(load(fn))
+		_, done := uniq[fn]
+		if !done {
+			check(load(fn))
+			uniq[fn] = true
+		}
 	}
 
 	check(z.Close())
@@ -54,10 +61,6 @@ func check(err error) {
 }
 
 func load(filename string) error {
-	if _, ok := loaded[filename]; ok {
-		fmt.Printf("dup %s\n", filename)
-		return nil
-	}
 	fi, err := os.Stat(filename)
 	check(err)
 	var src io.ReadCloser
@@ -76,7 +79,7 @@ func load(filename string) error {
 	check(err)
 	check(z.Flush())
 	fmt.Printf("zip %s %d\n", filename, n)
-	loaded[filename] = true
+	loaded = append(loaded, filename)
 	return nil
 }
 
@@ -101,12 +104,7 @@ func write() error {
 	check(err)
 	_, err = dst.WriteString("\n")
 	check(err)
-	l := make([]string, 0)
-	for	fn := range loaded {
-		l = append(l, fn)
-	}
-	sort.Strings(l)
-	for	_, fn := range l {
+	for _, fn := range loaded {
 		_, err = dst.WriteString(sprintf("// %s\n", fn))
 		check(err)
 	}

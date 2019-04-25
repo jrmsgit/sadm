@@ -13,7 +13,7 @@ tpath=${1:-'./...'}
 export SADM_PREFIX=${PWD}
 rm -f internal/cfg/build.go
 rm -f internal/log/debug.go
-test -f ./lib/zip.go || (cd lib && go run ./_zip/main.go)
+test -f ./lib/zip.go || (cd lib && go run ./_zip/main.go --prefix $SADM_PREFIX)
 go test $verbose $coverage $tpath
 if test "X${coverage}" != 'X'; then
   go tool cover -html coverage.out -o coverage.html

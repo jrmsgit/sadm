@@ -7,6 +7,7 @@ import (
 	"archive/zip"
 	"bytes"
 	"encoding/base64"
+	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -22,9 +23,16 @@ var loaded []string
 var b64 = base64.StdEncoding.EncodeToString
 var sprintf = fmt.Sprintf
 
-var prefix = "lalala"
+var prefix string
+
+func init() {
+	flag.StringVar(&prefix, "prefix", "/usr/local", "install prefix")
+}
 
 func main() {
+	flag.Parse()
+	fmt.Printf("zip prefix %s\n", prefix)
+
 	files := make([]string, 0)
 
 	l, err := fp.Glob("*/*.json")

@@ -26,7 +26,7 @@ def install():
 	os.environ['GOBIN'] = '%s/bin' % prefix
 
 	os.system('rm -f ./internal/log/debug.go')
-	os.system('cd lib && go run ./_zip/main.go')
+	os.system('cd lib && go run ./_zip/main.go --prefix %s' % prefix)
 
 	build_cfg('./internal/cfg/build.go.in')
 	build_cfg('./etc/sadm.json.in')

@@ -23,7 +23,6 @@ func NewConfig(src string) *cfg.Cfg {
 	if err != nil {
 		panic(err)
 	}
-	x.LibDir = prefix + "/lib"
 	x.CfgDir = prefix + "/etc/sadm"
 	return x
 }

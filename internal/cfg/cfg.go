@@ -15,7 +15,6 @@ import (
 var Prefix = "/usr/local"
 
 type Cfg struct {
-	LibDir string
 	CfgDir string
 }
 
@@ -33,13 +32,11 @@ func New(src io.ReadCloser) (*Cfg, error) {
 		}
 	}
 	// paths cleanup
-	config.LibDir = filepath.Clean(config.LibDir)
 	config.CfgDir = filepath.Clean(config.CfgDir)
 	//~ log.Debug("%#v", config)
 	return config, nil
 }
 
 func setDefaults(config *Cfg) {
-	config.LibDir = filepath.Join(Prefix, "lib", "sadm")
 	config.CfgDir = filepath.Join(Prefix, "etc", "sadm")
 }

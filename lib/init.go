@@ -22,7 +22,7 @@ func Init() error {
 		prefix = "./lib"
 	}
 	log.Debug("prefix %s", prefix)
-	log.Debug("zipfile %d", len(zipfile))
+	log.Debug("lib.zip.b64 %d", len(zipfile))
 	storage = make(map[string]*zip.File)
 	if zipfile != "" {
 		blob, err := b64(zipfile)
@@ -32,7 +32,7 @@ func Init() error {
 		}
 		zdata := bytes.NewReader(blob)
 		var zr *zip.Reader
-		log.Debug("zdata %d", zdata.Len())
+		log.Debug("lib.zip %d", zdata.Len())
 		zr, err = zip.NewReader(zdata, int64(zdata.Len()))
 		if err != nil {
 			log.Debug("%s", err)

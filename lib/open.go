@@ -35,5 +35,6 @@ func zipExists(filename string) bool {
 
 func zipOpen(filename string) (io.ReadCloser, error) {
 	//~ log.Debug("zip %s", filename)
-	return nil, nil
+	fh := storage[filename]
+	return fh.Open()
 }

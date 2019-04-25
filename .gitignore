@@ -7,3 +7,6 @@ bin/*.bin
 coverage.html
 coverage.out
 internal/log/debug.go
+lib/zip.go
+lib/lib.zip
+lib/lib.zip.b64

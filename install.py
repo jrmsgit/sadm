@@ -26,6 +26,7 @@ def install():
 	os.environ['GOBIN'] = '%s/bin' % prefix
 
 	os.system('rm -f ./internal/log/debug.go')
+	os.system('cd lib && go run ./_zip/main.go')
 
 	build_cfg('./internal/cfg/build.go.in')
 	build_cfg('./etc/sadm.json.in')
@@ -40,15 +41,10 @@ def install():
 	os.system('cp -va etc/sadm/*.json %s/share/doc/sadm/examples' % prefix)
 	os.system('cp -va etc/sadm/template %s/share/doc/sadm/examples' % prefix)
 
-	os.system('mkdir -vp %s/lib/sadm' % prefix)
-	os.system('cp -va lib/* %s/lib/sadm' % prefix)
-	os.system('rm -rf %s/lib/sadm/env/testing' % prefix)
-
 def uninstall():
 	cmd = 'rm -rfv %s/bin/sadm' % prefix
 	cmd += ' %s/etc/sadm' % prefix
 	cmd += ' %s/etc/sadm.json' % prefix
-	cmd += ' %s/lib/sadm' % prefix
 	cmd += ' %s/share/doc/sadm' % prefix
 	os.system(cmd)
 

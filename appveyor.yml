@@ -24,7 +24,7 @@ before_build:
 
 build_script:
   - ./vendor/deps.sh
-  - ./install.py --prefix ${GOPATH}
+  - ./install.py --prefix ${PWD}/prefix
 
 test_script:
   - ./test.sh

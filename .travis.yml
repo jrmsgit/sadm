@@ -17,7 +17,7 @@ branches:
 
 install:
   - ./vendor/deps.sh
-  - ./install.py --prefix ${GOPATH}
+  - ./install.py --prefix ${PWD}/prefix
 
 script:
   - ./test.sh

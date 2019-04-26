@@ -9,3 +9,4 @@ coverage.out
 internal/log/debug.go
 lib/zipfs.go
 lib/fs.zip
+prefix/

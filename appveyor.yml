@@ -23,6 +23,7 @@ before_build:
   - go version
 
 build_script:
+  - ./deps.sh
   - ./install.py --prefix ${GOPATH}
 
 test_script:

@@ -16,7 +16,7 @@ branches:
     - master
 
 install:
-  - ./deps.sh
+  - ./vendor/deps.sh
   - ./install.py --prefix ${GOPATH}
 
 script:

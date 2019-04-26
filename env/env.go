@@ -108,10 +108,10 @@ func (e *Env) loadFile(filename, prefix string) error {
 		return err
 	}
 	log.Debug("load %s", filename)
-	return e.load(prefix, fh)
+	return e.load(filename, prefix, fh)
 }
 
-func (e *Env) load(prefix string, fh io.ReadCloser) error {
+func (e *Env) load(filename, prefix string, fh io.ReadCloser) error {
 	defer fh.Close()
 	src := make(map[string]string)
 	if blob, err := ioutil.ReadAll(fh); err != nil {
@@ -119,8 +119,9 @@ func (e *Env) load(prefix string, fh io.ReadCloser) error {
 		return err
 	} else {
 		if err := json.Unmarshal(blob, &src); err != nil {
-			log.Debug("%s", err)
-			return err
+			e := errors.New("lib unmarshal error " + filename + ": " + err.Error())
+			log.Debug("%s", e)
+			return e
 		} else {
 			if prefix != "" {
 				prefix = prefix + "."

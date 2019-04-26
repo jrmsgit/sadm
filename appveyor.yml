@@ -11,7 +11,7 @@ max_jobs: 3
 image: Ubuntu1804
 
 clone_folder: /usr/go/src/github.com/jrmsdev/sadm
-clone_depth: 5
+clone_depth: 3
 
 stack: go 1.11
 

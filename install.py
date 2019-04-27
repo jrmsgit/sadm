@@ -5,7 +5,7 @@ import sys
 
 from argparse import ArgumentParser
 
-prefix = '/usr/local'
+prefix = './prefix'
 
 args = ArgumentParser(description = 'sadm installer')
 args.add_argument('--prefix', default = prefix, metavar = prefix,

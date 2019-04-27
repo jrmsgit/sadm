@@ -13,6 +13,12 @@ args.add_argument('--prefix', default = prefix, metavar = prefix,
 args.add_argument('--remove', action = 'store_true', default = False,
 	help = 'uninstall')
 
+def call(cmd):
+	rc = os.system(cmd)
+	if rc != 0:
+		print(cmd, 'failed')
+		sys.exit(rc)
+
 def build_cfg(src_file):
 	dst_file = src_file[:-3]
 	with open(src_file, 'r') as src:
@@ -25,32 +31,32 @@ def build_cfg(src_file):
 def install():
 	os.environ['GOBIN'] = '%s/bin' % prefix
 
-	os.system('rm -f ./internal/log/debug.go')
-	os.system('cd ./lib && ./gen.sh --prefix %s/lib/sadm' % prefix)
+	call('rm -f ./internal/log/debug.go')
+	call('cd ./lib && ./gen.sh --prefix %s/lib/sadm' % prefix)
 
 	build_cfg('./internal/cfg/build.go.in')
 	build_cfg('./etc/sadm.json.in')
 
-	os.system('go install ./bin/sadm')
+	call('go install ./bin/sadm')
 	print('%s/bin/sadm installed' % prefix)
 
-	os.system('mkdir -vp %s/etc/sadm' % prefix)
-	os.system('cp -va etc/sadm.json %s/etc' % prefix)
+	call('mkdir -p %s/etc/sadm' % prefix)
+	call('cp -va etc/sadm.json %s/etc' % prefix)
 
-	os.system('mkdir -vp %s/share/doc/sadm/examples' % prefix)
-	os.system('cp -va etc/sadm/*.json %s/share/doc/sadm/examples' % prefix)
-	os.system('cp -va etc/sadm/template %s/share/doc/sadm/examples' % prefix)
+	call('mkdir -p %s/share/doc/sadm/examples' % prefix)
+	call('cp -va etc/sadm/*.json %s/share/doc/sadm/examples' % prefix)
+	call('cp -va etc/sadm/template %s/share/doc/sadm/examples' % prefix)
 
 def uninstall():
 	cmd = 'rm -rfv %s/bin/sadm' % prefix
 	cmd += ' %s/etc/sadm' % prefix
 	cmd += ' %s/etc/sadm.json' % prefix
 	cmd += ' %s/share/doc/sadm' % prefix
-	os.system(cmd)
+	call(cmd)
 
 if __name__ == '__main__':
 	flags = args.parse_args()
-	prefix = flags.prefix
+	prefix = os.path.abspath(flags.prefix)
 	if flags.remove:
 		uninstall()
 	else:

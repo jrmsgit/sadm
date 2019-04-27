@@ -31,9 +31,11 @@ build_script:
   - ./install.py --prefix ${PWD}/prefix
   - mkdir build
   - tar -vcJf build/sadm-build${APPVEYOR_BUILD_NUMBER}.txz -C prefix .
+  - sha512sum build/sadm-build*.txz >build/sadm-build${APPVEYOR_BUILD_NUMBER}-sha512sum.txt
 
 test_script:
   - ./test.sh
 
 artifacts:
   - path: 'build/sadm-build*.txz'
+  - path: 'build/sadm-build*sum.txt'

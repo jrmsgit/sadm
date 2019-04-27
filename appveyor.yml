@@ -30,7 +30,7 @@ before_build:
 build_script:
   - ./install.py --prefix ${PWD}/prefix
   - mkdir build
-  - tar -C prefix -vcJf build/sadm-build${APPVEYOR_BUILD_NUMBER}.txz
+  - tar -vcJf build/sadm-build${APPVEYOR_BUILD_NUMBER}.txz -C prefix .
 
 test_script:
   - ./test.sh

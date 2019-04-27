@@ -18,15 +18,22 @@ stack: go 1.11
 matrix:
   fast_finish: true
 
+deploy: off
+
+install:
+  - ./vendor/deps.sh
+
 before_build:
   - export GOPATH=/usr/go
   - go version
 
 build_script:
-  - ./vendor/deps.sh
   - ./install.py --prefix ${PWD}/prefix
+  - mkdir build
+  - tar -C prefix -vcJf build/sadm-build${APPVEYOR_BUILD_NUMBER}.txz
 
 test_script:
   - ./test.sh
 
-deploy: off
+artifacts:
+  - path: 'build/sadm-build*.txz'

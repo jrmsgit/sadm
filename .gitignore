@@ -1,12 +1,12 @@
 *.swp
-internal/cfg/build.go
-etc/sadm.json
-build/
-var/
 bin/*.bin
+build/
 coverage.html
 coverage.out
+etc/sadm.json
+internal/cfg/build.go
 internal/log/debug.go
-lib/zipfs.go
 lib/fs.zip
+lib/zipfs.go
 prefix/
+var/
